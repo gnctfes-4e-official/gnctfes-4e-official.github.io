@@ -177,7 +177,7 @@
       <footer class="foot">
         <div class="wrap">
           <p class="foot-title">めっちゃ<span class="e">E</span>科メレオン</p>
-          <p>${esc(SITE.school)}　${esc(SITE.event)}</p>
+          <p><span class="nb">${esc(SITE.school)}</span>　<span class="nb">${esc(SITE.event)}</span></p>
         </div>
       </footer>`;
   }

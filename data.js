@@ -12,14 +12,14 @@ const SITE = {
   showPlaceholders: true,
 
   // トップに出すアイコン（インスタと同じもの）。ファイルが無いときはカメレオンの絵になる
-  logo: "images/icon.png",
+  logo: "images/icon.jpg",
 
-  school: "岐阜工業高等専門学校 電気情報工学科",
-  event: "高専祭 専門展示",
+  school: "岐阜工業高等専門学校 電気情報工学科 4年",
+  event: "高専祭2026　専門展",
   date: "",   // 例："11月8日（土）・9日（日）10:00〜15:00"
   place: "",  // 例："電気情報工学科棟 2階 ○○実験室"
   intro:
-    "電気情報工学科の学生が5つのチームに分かれ、カメレオンをテーマにした作品をつくりました。\n" +
+    "電気情報工学科の学生が6つのチームに分かれ、カメレオンをテーマにした作品をつくりました。\n" +
     "気になる作品をタップすると、遊び方や仕組みをくわしく見られます。",
 };
 
@@ -97,6 +97,20 @@ const TEAMS = [
     id: "team5",
     no: 5,
     color: "#3A9BFF",
+    name: "",
+    catch: "",
+    icon: "",
+    image: "",
+    summary: "",
+    howto: [],
+    points: [],
+    tech: { text: "", parts: [], figure: "", figureCaption: "" },
+    media: [],
+  },
+  {
+    id: "team6",
+    no: 6,
+    color: "#A57BFF",
     name: "",
     catch: "",
     icon: "",

@@ -165,10 +165,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
 @keyframes chameleon {
   0%, 100% { color: #3DBA4E; }
-  20% { color: #F5B700; }
-  40% { color: #FF7A2F; }
-  60% { color: #FF5C93; }
-  80% { color: #3A9BFF; }
+  16% { color: #F5B700; }
+  33% { color: #FF7A2F; }
+  50% { color: #FF5C93; }
+  66% { color: #3A9BFF; }
+  83% { color: #A57BFF; }
 }
 
 @media (min-width: 760px) {
@@ -429,3 +430,5 @@ figcaption { font-size: .88rem; color: var(--ink-soft); margin-top: 6px; }
   .mascot.cycle { animation: none; }
   .card, .more span, .pager a, .back { transition: none; }
 }
+
+.nb { display: inline-block; }
