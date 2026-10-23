@@ -56,7 +56,7 @@
             ${t.icon ? `<img src="${esc(t.icon)}" alt="">` : mascot()}
           </div>
           <div class="card-body">
-            <p class="team-no">TEAM ${t.no}</p>
+            <p class="team-no">TEAM ${t.no}${t.sample ? `<span class="tag">記入例</span>` : ""}</p>
             <h3 class="card-name">${esc(teamName(t))}</h3>
             ${t.catch ? `<p class="card-catch">${esc(t.catch)}</p>` : ""}
             <p class="more">くわしく見る<span aria-hidden="true"> →</span></p>
@@ -112,9 +112,21 @@
 
     const summary = t.summary ? `<p>${br(t.summary)}</p>` : ph("ここに作品の紹介文が入ります。");
 
-    const howto = t.howto.length
-      ? `<ol class="steps">${t.howto.map((s) => `<li>${br(s)}</li>`).join("")}</ol>`
-      : ph("ここに遊び方の手順が入ります。");
+    const play = t.play || {};
+    const playInfo = [
+      play.time && `<div><dt>時間</dt><dd>${esc(play.time)}</dd></div>`,
+      play.players && `<div><dt>人数</dt><dd>${esc(play.players)}</dd></div>`,
+      play.target && `<div><dt>対象</dt><dd>${esc(play.target)}</dd></div>`,
+    ].filter(Boolean).join("");
+    const howto =
+      (playInfo ? `<dl class="play-info">${playInfo}</dl>` : "") +
+      (t.howto.length
+        ? `<ol class="steps">${t.howto.map((s) => `<li>${br(s)}</li>`).join("")}</ol>`
+        : ph("ここに遊び方の手順が入ります。"));
+
+    const chameleon = t.chameleon
+      ? `<p>${br(t.chameleon)}</p>`
+      : ph("ここにカメレオンポイント（作品のどこが「カメレオン」なのか）が入ります。");
 
     const points = t.points.length
       ? `<ul class="points">${t.points.map((s) => `<li>${br(s)}</li>`).join("")}</ul>`
@@ -126,7 +138,7 @@
         ? `<h3 class="sub">使った部品・技術</h3><ul class="chips">${tech.parts.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>`
         : "") +
       (tech.figure
-        ? `<figure class="fig"><img src="${esc(tech.figure)}" alt="${esc(tech.figureCaption || "仕組みの図")}">${tech.figureCaption ? `<figcaption>${esc(tech.figureCaption)}</figcaption>` : ""}</figure>`
+        ? `<figure class="fig"><a href="${esc(tech.figure)}" target="_blank" rel="noopener"><img src="${esc(tech.figure)}" alt="${esc(tech.figureCaption || "仕組みの図")}"></a>${tech.figureCaption ? `<figcaption>${esc(tech.figureCaption)}（タップで拡大）</figcaption>` : ""}</figure>`
         : "");
     if (!techBody) techBody = ph("ここに仕組みの解説（回路図・使った部品・プログラムの流れなど）が入ります。");
 
@@ -140,6 +152,7 @@
           <div class="wrap d-hero-inner">
             <a class="back" href="#works"><span aria-hidden="true">← </span>作品一覧</a>
             <p class="team-no">TEAM ${t.no}</p>
+            ${t.sample ? `<p class="sample">記入例（架空の作品です）</p>` : ""}
             <h1 class="d-title">${esc(teamName(t))}</h1>
             ${t.catch ? `<p class="d-catch">${esc(t.catch)}</p>` : ph("ここにキャッチコピーが入ります。")}
             <div class="d-visual">
@@ -151,6 +164,7 @@
           ${section("どんな作品？", summary)}
           ${section("あそびかた", howto)}
           ${section("見どころ", points)}
+          ${section("カメレオンポイント", chameleon)}
           ${section("しくみ", techBody)}
           ${section("写真・動画", media)}
         </main>

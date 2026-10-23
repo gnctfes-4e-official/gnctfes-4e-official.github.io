@@ -28,8 +28,10 @@ const SITE = {
  *   color   … そのチームの「体色」。カードと詳しいページの色になる
  *   icon    … 一覧に出す画像（正方形がきれい）。"" のときはカメレオンの絵になる
  *   image   … 詳しいページの一番上に出す大きな画像（横長がきれい）
+ *   play    … 1回の時間・人数・対象（あそびかたの上に出る）
  *   howto   … あそびかたの手順（上から順番に表示）
  *   points  … 見どころ（いくつでも）
+ *   chameleon … カメレオンポイント（作品のどこが「カメレオン」なのか）
  *   tech    … しくみ。parts は使った部品・技術、figure は回路図やブロック図の画像
  *   media   … 写真・動画。
  *             { type: "image", src: "images/xxx.jpg", caption: "説明" }
@@ -41,14 +43,46 @@ const TEAMS = [
     id: "team1",
     no: 1,
     color: "#3DBA4E",
-    name: "",
-    catch: "",
+    // ↓ 記入例（架空の作品）。本物の内容が届いたら書きかえて、sample の行を消す
+    sample: true,
+    name: "まぜまぜカメレオン",
+    catch: "光の3色をまぜて、カメレオンをかくしてあげよう！",
     icon: "",
     image: "",
-    summary: "",
-    howto: [],
-    points: [],
-    tech: { text: "", parts: [], figure: "", figureCaption: "" },
+    summary:
+      "背景のパネルが光ってお題の色が出ます。3つのつまみを回してカメレオンの体の色を変え、背景と同じ色にできたら高得点のゲームです。\n" +
+      "つまみはそれぞれ赤・緑・青の光の明るさを変えていて、まぜ方しだいで約1677万色をつくれます。30秒で何点とれるかな？",
+    play: { time: "1回 約1分", players: "1人（2人で協力してもOK）", target: "小学生から" },
+    howto: [
+      "スタートボタンを押すと、背景のパネルが光ってお題の色が出ます。",
+      "赤・緑・青の3つのつまみを回して、カメレオンの体の色を背景の色に近づけます。",
+      "「これだ！」と思ったら決定ボタンを押します。",
+      "色の近さが100点満点で表示されます。30秒の間なら何回でも挑戦できます。",
+    ],
+    points: [
+      "赤と緑の光をまぜると黄色になるなど、絵の具とはちがう「光の色のまざり方」を体験できます。",
+      "点数は、お題の色とカメレオンの色がどれだけ離れているかを計算して出しています。",
+      "カメレオンの体には60個のフルカラーLEDを、うろこ模様に合わせて1個ずつ並べました。",
+    ],
+    chameleon:
+      "カメレオンは体の色を変える生き物として知られています。このゲームでは、あなたがカメレオンの代わりに色をつくり、カメレオンを背景にとけこませます。",
+    tech: {
+      text:
+        "つまみ（可変抵抗）を回すと、マイコンに入る電圧が0〜5Vの間で変わります。マイコンはこの電圧をAD変換で0〜1023の数に直し、さらにLEDの明るさ0〜255に直して、カメレオンの体のLEDに送ります。\n" +
+        "決定ボタンが押されたら、お題の色と体の色の赤・緑・青それぞれの差から2つの色の距離を計算し、距離が近いほど高い点数をつけます。",
+      parts: [
+        "Arduino Uno（マイコン）",
+        "フルカラーLED WS2812B（体60個・背景24個）",
+        "可変抵抗 10kΩ ×3",
+        "押しボタンスイッチ ×2",
+        "液晶ディスプレイ 16文字×2行",
+        "圧電ブザー",
+        "ACアダプタ 5V 6A",
+        "プログラム：Arduino言語（C++）",
+      ],
+      figure: "images/team1-system.svg",
+      figureCaption: "システム図：つまみとボタン（入力）→ マイコン（処理）→ LED・液晶・ブザー（出力）",
+    },
     media: [],
   },
   {
@@ -62,6 +96,8 @@ const TEAMS = [
     summary: "",
     howto: [],
     points: [],
+    play: { time: "", players: "", target: "" },
+    chameleon: "",
     tech: { text: "", parts: [], figure: "", figureCaption: "" },
     media: [],
   },
@@ -76,6 +112,8 @@ const TEAMS = [
     summary: "",
     howto: [],
     points: [],
+    play: { time: "", players: "", target: "" },
+    chameleon: "",
     tech: { text: "", parts: [], figure: "", figureCaption: "" },
     media: [],
   },
@@ -90,6 +128,8 @@ const TEAMS = [
     summary: "",
     howto: [],
     points: [],
+    play: { time: "", players: "", target: "" },
+    chameleon: "",
     tech: { text: "", parts: [], figure: "", figureCaption: "" },
     media: [],
   },
@@ -104,6 +144,8 @@ const TEAMS = [
     summary: "",
     howto: [],
     points: [],
+    play: { time: "", players: "", target: "" },
+    chameleon: "",
     tech: { text: "", parts: [], figure: "", figureCaption: "" },
     media: [],
   },
@@ -118,6 +160,8 @@ const TEAMS = [
     summary: "",
     howto: [],
     points: [],
+    play: { time: "", players: "", target: "" },
+    chameleon: "",
     tech: { text: "", parts: [], figure: "", figureCaption: "" },
     media: [],
   },

@@ -432,3 +432,44 @@ figcaption { font-size: .88rem; color: var(--ink-soft); margin-top: 6px; }
 }
 
 .nb { display: inline-block; }
+
+/* 記入例の目印 */
+.sample {
+  align-self: flex-start;
+  margin: 4px 0;
+  font-size: .85rem;
+  font-weight: 900;
+  background: var(--volt);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 0 12px;
+}
+.tag {
+  font-family: var(--font-body);
+  font-weight: 900;
+  font-size: .72rem;
+  letter-spacing: 0;
+  background: var(--volt);
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 0 8px;
+  margin-left: 8px;
+}
+
+/* 遊ぶ時間・人数・対象 */
+.play-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 14px 0 16px;
+}
+.play-info div { display: flex; gap: 8px; align-items: baseline; }
+.play-info dt {
+  font-size: .8rem;
+  font-weight: 900;
+  background: var(--c);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  padding: 0 8px;
+}
+.play-info dd { margin: 0; font-weight: 700; }
