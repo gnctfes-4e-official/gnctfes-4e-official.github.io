@@ -132,7 +132,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 }
 
 .t-small { font-size: clamp(1.5rem, 5vw, 2.2rem); }
-.t-big { font-size: clamp(2.6rem, 11.5vw, 5.4rem); white-space: nowrap; }
+.t-big { font-size: clamp(2.4rem, 10.5vw, 4.6rem); white-space: nowrap; }
 
 .lead {
   margin: 20px 0 0;
@@ -485,3 +485,27 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
 .glossary div { border-left: 6px solid var(--c); padding: 2px 0 2px 12px; }
 .glossary dt { font-weight: 900; font-size: 1.05rem; }
 .glossary dd { margin: 2px 0 0; max-width: 40em; }
+
+/* 公式 Instagram ボタン */
+.insta {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--paper);
+  background: linear-gradient(120deg, #F9A23B, #E1306C 50%, #8A3AB9);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: 8px 16px 8px 12px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.insta:hover, .insta:focus-visible { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.insta:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+.insta svg { width: 30px; height: 30px; flex: none; }
+.insta > span:not(.insta-arrow) { display: flex; flex-direction: column; line-height: 1.3; }
+.insta-label { font-weight: 900; font-size: 1rem; }
+.insta-name { font-size: .82rem; font-weight: 700; opacity: .92; }
+.insta-arrow { font-weight: 900; font-size: 1.1rem; }
+@media (prefers-reduced-motion: reduce) { .insta { transition: none; } }

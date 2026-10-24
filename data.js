@@ -14,6 +14,9 @@ const SITE = {
   // トップに出すアイコン（インスタと同じもの）。ファイルが無いときはカメレオンの絵になる
   logo: "images/icon.jpg",
 
+  // 公式 Instagram（トップの紹介文の下にボタンで出る）
+  instagram: { url: "https://www.instagram.com/gnctfes_4e_official/", name: "@gnctfes_4e_official" },
+
   school: "岐阜工業高等専門学校 電気情報工学科 4年",
   event: "高専祭2026　専門展",
   date: "",   // 例："11月8日（土）・9日（日）10:00〜15:00"

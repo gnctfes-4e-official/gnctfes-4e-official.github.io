@@ -79,6 +79,12 @@
             </h1>
             <p class="lead">${br(SITE.intro)}</p>
             ${info ? `<dl class="info">${info}</dl>` : ""}
+            ${SITE.instagram && SITE.instagram.url ? `
+            <a class="insta" href="${esc(SITE.instagram.url)}" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>
+              <span><span class="insta-label">公式 Instagram</span><span class="insta-name">${esc(SITE.instagram.name)}</span></span>
+              <span class="insta-arrow" aria-hidden="true">↗</span>
+            </a>` : ""}
           </div>
           <div class="hero-art">
             ${SITE.logo ? `<img class="logo" src="${esc(SITE.logo)}" alt="めっちゃE科メレオンのアイコン">` : mascot("cycle")}
