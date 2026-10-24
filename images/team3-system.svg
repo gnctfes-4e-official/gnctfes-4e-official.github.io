@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="540" viewBox="0 0 1020 540" font-family="'Hiragino Sans','Yu Gothic','Meiryo',sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#15331F"/>
+    </marker>
+  </defs>
+
+  <rect width="1020" height="540" fill="#FFFFFF"/>
+
+  <!-- 列の見出し -->
+  <g font-size="22" font-weight="700" fill="#15331F" text-anchor="middle">
+    <text x="130" y="40">入力</text>
+    <text x="405" y="40">マイコン</text>
+    <text x="665" y="40">PC</text>
+    <text x="915" y="40">出力</text>
+  </g>
+
+  <!-- 入力 -->
+  <g stroke="#15331F" stroke-width="3" fill="#E6F4DC">
+    <rect x="20" y="70" width="220" height="72" rx="12"/>
+    <rect x="20" y="160" width="220" height="72" rx="12"/>
+    <rect x="20" y="250" width="220" height="72" rx="12"/>
+    <rect x="20" y="340" width="220" height="72" rx="12"/>
+  </g>
+  <g fill="#15331F" text-anchor="middle">
+    <text x="130" y="100" font-size="18" font-weight="700">ロータリーエンコーダ</text>
+    <text x="130" y="125" font-size="14">旋回ハンドル（横の動き）</text>
+    <text x="130" y="190" font-size="18" font-weight="700">ロータリーエンコーダ</text>
+    <text x="130" y="215" font-size="14">俯仰ハンドル（縦の動き）</text>
+    <text x="130" y="280" font-size="18" font-weight="700">ペダルスイッチ ×2</text>
+    <text x="130" y="305" font-size="14">トリガー（発砲）</text>
+    <text x="130" y="370" font-size="18" font-weight="700">CdSセル ×3</text>
+    <text x="130" y="395" font-size="14">弾倉の装填を検知</text>
+  </g>
+
+  <!-- マイコン -->
+  <rect x="310" y="70" width="190" height="342" rx="14" fill="#BFE8C4" stroke="#15331F" stroke-width="3"/>
+  <g fill="#15331F" text-anchor="middle">
+    <text x="405" y="106" font-size="19" font-weight="700">Arduino Uno R3</text>
+    <text x="405" y="130" font-size="14">（互換品 ELEGOO）</text>
+  </g>
+  <line x1="326" y1="146" x2="484" y2="146" stroke="#15331F" stroke-width="1.5"/>
+  <g fill="#15331F" font-size="14">
+    <text x="324" y="190">① センサの値を読む</text>
+    <text x="324" y="240">② 値を解釈・整頓</text>
+    <text x="324" y="290">③ 文字列にして</text>
+    <text x="324" y="312">　 PCへ送る</text>
+  </g>
+
+  <!-- PC -->
+  <rect x="570" y="70" width="190" height="342" rx="14" fill="#FFE0CC" stroke="#15331F" stroke-width="3"/>
+  <g fill="#15331F" text-anchor="middle">
+    <text x="665" y="106" font-size="19" font-weight="700">Godot</text>
+    <text x="665" y="130" font-size="14">（ゲームエンジン）</text>
+  </g>
+  <line x1="586" y1="146" x2="744" y2="146" stroke="#15331F" stroke-width="1.5"/>
+  <g fill="#15331F" font-size="14">
+    <text x="584" y="190">① 文字列を受け取る</text>
+    <text x="584" y="240">② 照準・発砲・装填に</text>
+    <text x="584" y="262">　 反映する</text>
+    <text x="584" y="312">③ 敵機を動かし、</text>
+    <text x="584" y="334">　 命中を判定する</text>
+    <text x="584" y="384">④ 時間と点数を表示</text>
+  </g>
+
+  <!-- 出力 -->
+  <g stroke="#15331F" stroke-width="3" fill="#FFF4C2">
+    <rect x="830" y="130" width="170" height="72" rx="12"/>
+    <rect x="830" y="250" width="170" height="72" rx="12"/>
+  </g>
+  <g fill="#15331F" text-anchor="middle">
+    <text x="915" y="160" font-size="18" font-weight="700">画面</text>
+    <text x="915" y="185" font-size="14">ゲームの映像</text>
+    <text x="915" y="280" font-size="18" font-weight="700">音</text>
+    <text x="915" y="305" font-size="14">発砲音などの効果音</text>
+  </g>
+
+  <!-- 矢印 -->
+  <g stroke="#15331F" stroke-width="2.5" marker-end="url(#a)">
+    <line x1="240" y1="106" x2="308" y2="106"/>
+    <line x1="240" y1="196" x2="308" y2="196"/>
+    <line x1="240" y1="286" x2="308" y2="286"/>
+    <line x1="240" y1="376" x2="308" y2="376"/>
+    <line x1="500" y1="241" x2="568" y2="241"/>
+    <line x1="760" y1="166" x2="828" y2="166"/>
+    <line x1="760" y1="286" x2="828" y2="286"/>
+  </g>
+  <g fill="#15331F" font-size="13" text-anchor="middle">
+    <text x="274" y="98">回転</text>
+    <text x="274" y="188">回転</text>
+    <text x="274" y="278">ON/OFF</text>
+    <text x="274" y="368">明るさ</text>
+    <text x="534" y="226">シリアル</text>
+    <text x="534" y="263">通信</text>
+  </g>
+
+  <!-- 送られる文字列の例 -->
+  <text x="310" y="446" font-size="13" fill="#15331F">シリアル通信で PC に送られる文字列の例</text>
+  <rect x="310" y="456" width="450" height="68" rx="10" fill="#15331F"/>
+  <g font-family="'Consolas','MS Gothic',monospace" font-size="14" fill="#C8F7C5">
+    <text x="326" y="484">俯仰:0 旋回:0 外トリガー:false 内トリガー:false</text>
+    <text x="326" y="508">弾倉1:false 弾倉2:false 弾倉3:false</text>
+  </g>
+</svg>
