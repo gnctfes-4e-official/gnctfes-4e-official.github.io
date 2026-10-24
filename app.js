@@ -381,7 +381,67 @@
    * ・キーボードで ↑↑↓↓←→←→BA
    * → 10 秒間、サイト全体がカメレオンのように色を変える */
   let secretTimer = 0;
+
+  // 変身の音（ファイルを使わず、ブラウザでその場で作る）
+  //   ピロピロ↑ → シュワーン → ドーン！ → キラキラ（約1.5秒）
+  function secretSound(ctx, out) {
+    const t0 = ctx.currentTime + 0.02;
+    const tone = (type, f0, f1, start, dur, vol) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(f0, t0 + start);
+      if (f1) o.frequency.exponentialRampToValueAtTime(f1, t0 + start + dur);
+      g.gain.setValueAtTime(0.0001, t0 + start);
+      g.gain.exponentialRampToValueAtTime(vol, t0 + start + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + start + dur);
+      o.connect(g).connect(out);
+      o.start(t0 + start);
+      o.stop(t0 + start + dur + 0.02);
+    };
+    const noise = (start, dur, vol, filterType, fA, fB) => {
+      const len = Math.ceil(ctx.sampleRate * dur);
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      const src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+      src.buffer = buf;
+      f.type = filterType;
+      f.frequency.setValueAtTime(fA, t0 + start);
+      f.frequency.exponentialRampToValueAtTime(fB, t0 + start + dur);
+      g.gain.setValueAtTime(vol, t0 + start);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + start + dur);
+      src.connect(f).connect(g).connect(out);
+      src.start(t0 + start);
+    };
+    // ピロピロ↑（ド・ミ・ソ・ド・ミ・ソ）
+    [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone("square", f, 0, i * 0.055, 0.09, 0.2));
+    // シュワーン
+    noise(0.3, 0.42, 1.6, "bandpass", 500, 5000);
+    // ドーン！
+    tone("sine", 190, 42, 0.72, 0.65, 0.9);
+    tone("triangle", 95, 38, 0.72, 0.5, 0.4);
+    tone("square", 150, 55, 0.72, 0.45, 0.22);   // スマホのスピーカーでも聞こえる成分
+    noise(0.72, 0.4, 1.0, "lowpass", 2500, 150);
+    // キラキラ
+    [2093, 2637, 3136, 2794, 3520].forEach((f, i) => tone("sine", f, 0, 0.9 + i * 0.07, 0.2, 0.22));
+  }
+  let audioCtx = null;
+  function playSecretSound() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!audioCtx) audioCtx = new AC();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const master = audioCtx.createGain();
+      master.gain.value = 0.5;
+      master.connect(audioCtx.destination);
+      secretSound(audioCtx, master);
+    } catch (e) { /* 音が出せない環境では、色が変わるだけにする */ }
+  }
+  window.__secretSound = secretSound; // 音の確認用
+
   function chameleonMode() {
+    playSecretSound();
     document.documentElement.classList.add("chameleon-mode");
     let toast = document.getElementById("secret-toast");
     if (!toast) {
