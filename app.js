@@ -14,6 +14,8 @@
   const br = (s) => rb(s).replace(/\n/g, "<br>");
   const ph = (text) => (SITE.showPlaceholders ? `<p class="ph">${esc(text)}</p>` : "");
   const teamName = (t) => t.name || `チーム${t.no}の作品`;
+  // 作品名が入っていないチーム（または secret: true）は「COMING SOON」で中身を隠す
+  const isOpen = (t) => !!t.name && !t.secret;
 
   // カメレオン（体の色は currentColor、舌は電気）
   const mascot = (cls = "") => `
@@ -53,7 +55,7 @@
       SITE.place && `<div><dt>場所</dt><dd>${esc(SITE.place)}</dd></div>`,
     ].filter(Boolean).join("");
 
-    const cards = TEAMS.map((t) => `
+    const cards = TEAMS.map((t) => isOpen(t) ? `
       <li data-c="${esc(t.color)}">
         <a class="card" href="#${esc(t.id)}">
           <div class="card-art">
@@ -66,6 +68,16 @@
             <p class="more">くわしく見る<span aria-hidden="true"> →</span></p>
           </div>
         </a>
+      </li>` : `
+      <li data-c="${esc(t.color)}">
+        <div class="card card-soon">
+          <div class="card-art">${mascot()}<span class="soon-mark" aria-hidden="true">？</span></div>
+          <div class="card-body">
+            <p class="team-no">TEAM ${t.no}</p>
+            <h3 class="card-name">COMING SOON</h3>
+            <p class="card-catch">公開までお楽しみに！</p>
+          </div>
+        </div>
       </li>`).join("");
 
     app.innerHTML = `
@@ -95,6 +107,12 @@
         <h2 class="sec-title">${TEAMS.length}つの作品</h2>
         <ul class="cards">${cards}</ul>
       </main>
+      ${SITE.booths && SITE.booths.length ? `
+      <section class="wrap map-sec" id="map">
+        <h2 class="sec-title">会場マップ</h2>
+        <p class="map-lead">E科のブースを上から見た図です。ブースをタップすると、その作品の説明が見られます。</p>
+        <div class="map-box">${buildMapSVG({ links: true })}</div>
+      </section>` : ""}
       ${footer()}`;
     paint();
 
@@ -115,9 +133,10 @@
   function renderTeam(t) {
     setColor(t.color);
     document.title = `${plain(teamName(t))}｜めっちゃE科メレオン`;
-    const i = TEAMS.indexOf(t);
-    const prev = TEAMS[(i - 1 + TEAMS.length) % TEAMS.length];
-    const next = TEAMS[(i + 1) % TEAMS.length];
+    const open = TEAMS.filter(isOpen);
+    const i = open.indexOf(t);
+    const prev = open[(i - 1 + open.length) % open.length];
+    const next = open[(i + 1) % open.length];
     const tech = t.tech || {};
 
     const summary = t.summary ? `<p>${br(t.summary)}</p>` : ph("ここに作品の紹介文が入ります。");
@@ -183,14 +202,34 @@
           ${section("しくみ", techBody)}
           ${section("ことばの解説", glossary)}
           ${section("写真・動画", media)}
+          ${SITE.booths && SITE.booths.some((b) => b.team === t.id) ? section("会場での場所", `<div class="map-box">${buildMapSVG({ links: true, highlight: t.id })}</div>`) : ""}
         </main>
-        <nav class="wrap pager" aria-label="ほかの作品">
-          <a href="#${esc(prev.id)}" data-c="${esc(prev.color)}"><span class="pager-dir">← まえの作品</span><span class="pager-name">TEAM ${prev.no}　${esc(plain(teamName(prev)))}</span></a>
-          <a href="#${esc(next.id)}" data-c="${esc(next.color)}"><span class="pager-dir">つぎの作品 →</span><span class="pager-name">TEAM ${next.no}　${esc(plain(teamName(next)))}</span></a>
-        </nav>
+        ${open.length > 1 ? `<nav class="wrap pager${prev === next ? " pager-one" : ""}" aria-label="ほかの作品">
+          ${prev === next ? "" : `<a href="#${esc(prev.id)}" data-c="${esc(prev.color)}"><span class="pager-dir">← まえの作品</span><span class="pager-name">TEAM ${prev.no}　${esc(plain(teamName(prev)))}</span></a>`}
+          <a href="#${esc(next.id)}" data-c="${esc(next.color)}"><span class="pager-dir">${prev === next ? "ほかの作品" : "つぎの作品"} →</span><span class="pager-name">TEAM ${next.no}　${esc(plain(teamName(next)))}</span></a>
+        </nav>` : ""}
         ${footer()}
       </div>`;
     paint();
+  }
+
+  function renderSoon(t) {
+    setColor(t.color);
+    document.title = `TEAM ${t.no}｜めっちゃE科メレオン`;
+    app.innerHTML = `
+      <div class="detail">
+        <header class="d-hero">
+          <div class="wrap d-hero-inner">
+            <a class="back" href="#works"><span aria-hidden="true">← </span>作品一覧</a>
+            <p class="team-no">TEAM ${t.no}</p>
+            <h1 class="d-title">COMING SOON</h1>
+            <p class="d-catch">この作品の紹介は準備中です。公開までお楽しみに！</p>
+            <div class="d-visual soon-visual">${mascot()}<span class="soon-mark" aria-hidden="true">？</span></div>
+          </div>
+        </header>
+        <div class="wrap soon-back"><a class="back" href="#works"><span aria-hidden="true">← </span>ほかの作品を見る</a></div>
+        ${footer()}
+      </div>`;
   }
 
   function mediaItem(m) {
@@ -217,7 +256,8 @@
     const id = location.hash.replace(/^#/, "");
     const team = TEAMS.find((t) => t.id === id);
     if (team) {
-      renderTeam(team);
+      if (isOpen(team)) renderTeam(team);
+      else renderSoon(team);
       window.scrollTo(0, 0);
     } else {
       renderHome();

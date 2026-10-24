@@ -94,7 +94,6 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   border: 3px solid var(--ink);
   border-radius: 28px;
   box-shadow: var(--shadow);
-  transform: rotate(3deg);
 }
 
 .hero-inner {
@@ -509,3 +508,47 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
 .insta-name { font-size: .82rem; font-weight: 700; opacity: .92; }
 .insta-arrow { font-weight: 900; font-size: 1.1rem; }
 @media (prefers-reduced-motion: reduce) { .insta { transition: none; } }
+
+/* 会場マップ */
+.map-sec { padding-block: 0 56px; }
+.map-lead { margin: -8px 0 16px; }
+.map-box {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  padding: 8px;
+  max-width: 640px;
+}
+.panel .map-box { border: 0; padding: 0; margin-top: 14px; }
+.map-box svg { display: block; width: 100%; height: auto; }
+.map-box .booth { cursor: pointer; }
+.map-box .booth:hover rect, .map-box .booth:focus-visible rect { stroke-width: 6; }
+.map-box .booth:focus-visible { outline: none; }
+
+/* COMING SOON（まだ公開していない作品） */
+.card-soon { position: relative; }
+.card-soon:hover, .card-soon:active { transform: none; box-shadow: var(--shadow); }
+.card-soon .card-art {
+  background-color: #C9D2CC;
+  background-image: radial-gradient(#DCE3DE 22%, transparent 24%);
+  color: #E9EEEA;
+}
+.card-soon .card-name { font-family: var(--font-pixel); letter-spacing: .08em; }
+.soon-mark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  color: var(--ink);
+  text-shadow: 3px 3px 0 var(--paper);
+}
+.soon-visual { position: relative; color: #C9D2CC; }
+.soon-visual .soon-mark { font-size: 5rem; }
+.soon-back { padding-block: 32px 48px; }
+
+/* カードの中のカメレオンの絵は、枠の中に収める */
+.card-art > .mascot { position: absolute; left: 10%; top: 12%; width: 80%; height: 76%; }
+
+.pager-one { grid-template-columns: 1fr; }
