@@ -410,14 +410,14 @@
   /* ---------- 隠しコマンド ----------
    * ・タイトルの「E」を 3 秒以内に 5 回タップ（パソコンはダブルクリックでも）
    * ・キーボードで ↑↑↓↓←→←→BA
-   * → 当たり演出の音が鳴っている間（約8秒）、サイト全体がカメレオンのように色を変える */
+   * → 当たり演出の音が鳴っている間（約8.5秒）、サイト全体がカメレオンのように色を変える */
   let secretTimer = 0;
 
-  // 当たり演出の音（ファイルを使わず、ブラウザでその場で作る。約8秒）
-  //   ドドドド…（だんだん速く・ティンパニも）→ キュインキュインキュイン → ギュイーン
+  // 当たり演出の音（ファイルを使わず、ブラウザでその場で作る。約8.5秒）
+  //   ドドドド… → キュインキュインキュインキュイン…（7回・だんだん高く）→ ギュイーン
   //   → ドーン！＋シンバル → パパパ・パーン・パーン・パーーン（ファンファーレ）＋ キラキラ
   //   戻り値は音の長さ（秒）。隠しコマンドはこの長さで終わる
-  const SECRET_LEN = 8.3;   // 最後の響きが消えるまで
+  const SECRET_LEN = 8.5;
   function secretSound(ctx, out) {
     const t0 = ctx.currentTime + 0.03;
     // ホールで鳴っているような響き（残響）をつける
@@ -429,7 +429,7 @@
       const d = ir.getChannelData(ch);
       for (let i = 0; i < irLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 3);
     }
-    rev.buffer = ir; wet.gain.value = 0.28;
+    rev.buffer = ir; wet.gain.value = 0.25;
     bus.connect(rev).connect(wet).connect(out);
 
     const env = (g, start, dur, vol, attack, swell) => {
@@ -445,7 +445,8 @@
       o.type = type;
       o.frequency.setValueAtTime(f0, t0 + start);
       if (f1) o.frequency.exponentialRampToValueAtTime(f1, t0 + start + (opt.glide || dur));
-      if (opt.vib) {
+      if (opt.detune) o.detune.value = opt.detune;
+      if (opt.vib) {                              // ビブラート（音をゆらす）
         const l = ctx.createOscillator(), lg = ctx.createGain();
         l.frequency.value = opt.vib[0]; lg.gain.value = opt.vib[1];
         l.connect(lg).connect(o.frequency);
@@ -477,39 +478,45 @@
     const chord = (freqs, start, dur, vol, swell) => freqs.forEach((f) => brass(f, start, dur, vol, swell));
     const timpani = (freq, start, vol) => { tone("sine", freq, freq * 0.8, start, 0.7, vol); noise(start, 0.08, 0.4, "lowpass", 900, 200); };
     const cymbal = (start, dur, vol, attack) => noise(start, dur, vol, "highpass", 5000, 8000, attack);
+    // パチンコの「キュイン」：下からいっきに上がって、ふるえながら鳴る高い音（2つ重ねて太くする）
+    const kyuin = (start, base) => {
+      tone("square", base, base * 3.4, start, 0.21, 0.17, { glide: 0.09, vib: [38, base * 0.14] });
+      tone("sawtooth", base * 0.5, base * 1.7, start, 0.21, 0.1, { glide: 0.09, vib: [38, base * 0.07], detune: 12, lp: 6000 });
+    };
 
-    // 1. ドドドド…（だんだん速く・高く）＋ ティンパニのロール ＋ 盛り上がる音
-    let t = 0, gap = 0.17, k = 0;
-    while (t < 1.6) {
-      noise(t, 0.06, 0.8, "bandpass", 1500 + k * 50, 1100);
-      timpani(70 + k * 2, t, 0.25 + k * 0.012);
-      t += gap; gap = Math.max(0.035, gap * 0.88); k++;
+    // 1. ドドドド…（だんだん速く・高く）
+    let t = 0, gap = 0.12, k = 0;
+    while (t < 0.85) {
+      noise(t, 0.05, 0.8, "bandpass", 1500 + k * 60, 1100);
+      timpani(70 + k * 3, t, 0.25 + k * 0.015);
+      t += gap; gap = Math.max(0.035, gap * 0.85); k++;
     }
-    tone("sawtooth", 110, 440, 0, 1.65, 0.07, { lp: 1800, swell: true });
-    cymbal(0.6, 1.05, 0.25, 1.0);
-    // 2. キュインキュインキュイン
-    [1.68, 2.0, 2.32].forEach((st) => tone("square", 700, 2800, st, 0.28, 0.15, { glide: 0.15, vib: [32, 90] }));
+    tone("sawtooth", 110, 440, 0, 0.9, 0.07, { lp: 1800, swell: true });
+    // 2. キュインキュインキュインキュイン…（7回・だんだん高く）
+    for (let i = 0; i < 7; i++) kyuin(0.92 + i * 0.24, 760 * Math.pow(1.045, i));
+    cymbal(1.6, 1.15, 0.22, 1.1);
     // 3. ギュイーン
-    tone("sawtooth", 160, 2000, 2.65, 0.55, 0.26, { lp: 5000 });
-    noise(2.65, 0.55, 2.6, "bandpass", 400, 7000);
+    tone("sawtooth", 160, 2200, 2.62, 0.55, 0.26, { lp: 5000 });
+    noise(2.62, 0.55, 2.6, "bandpass", 400, 7000);
     // 4. ドーン！＋シンバル
-    tone("sine", 200, 40, 3.2, 1.0, 0.9);
-    tone("square", 160, 55, 3.2, 0.5, 0.2);
-    noise(3.2, 0.5, 1.0, "lowpass", 3000, 150);
-    cymbal(3.2, 2.4, 0.5);
+    const B = 3.2;
+    tone("sine", 200, 40, B, 1.0, 0.9);
+    tone("square", 160, 55, B, 0.5, 0.2);
+    noise(B, 0.5, 1.0, "lowpass", 3000, 150);
+    cymbal(B, 2.4, 0.5);
     // 5. ファンファーレ：パパパ（ソ・ド・ミ）→ パーン（ファ）→ パーン（ソ）→ パーーン（ド）
-    brass(392, 3.4, 0.14, 0.13); brass(523, 3.56, 0.14, 0.13); brass(659, 3.72, 0.3, 0.13);
-    chord([349, 440, 523, 698], 4.15, 0.45, 0.085); timpani(87, 4.15, 0.5);
-    chord([392, 494, 587, 784], 4.65, 0.45, 0.085); timpani(98, 4.65, 0.5);
-    chord([262, 330, 392, 523, 659, 784, 1047], 5.15, 2.4, 0.07, true);
-    tone("sine", 131, 0, 5.15, 2.4, 0.35, { attack: 0.03 });
-    let r = 5.15;
-    while (r < 6.9) { timpani(65, r, 0.22); r += 0.07; }      // 最後のティンパニのロール
-    cymbal(5.15, 2.4, 0.35, 1.6);                               // シンバルがふくらむ
-    timpani(65, 7.0, 0.8); cymbal(7.0, 0.6, 0.5);               // ジャン！
+    brass(392, B + 0.2, 0.14, 0.13); brass(523, B + 0.36, 0.14, 0.13); brass(659, B + 0.52, 0.3, 0.13);
+    chord([349, 440, 523, 698], B + 0.95, 0.45, 0.085); timpani(87, B + 0.95, 0.5);
+    chord([392, 494, 587, 784], B + 1.45, 0.45, 0.085); timpani(98, B + 1.45, 0.5);
+    chord([262, 330, 392, 523, 659, 784, 1047], B + 1.95, 2.4, 0.07, true);
+    tone("sine", 131, 0, B + 1.95, 2.4, 0.35, { attack: 0.03 });
+    let r = B + 1.95;
+    while (r < B + 3.7) { timpani(65, r, 0.22); r += 0.07; }   // 最後のティンパニのロール
+    cymbal(B + 1.95, 2.4, 0.35, 1.6);                          // シンバルがふくらむ
+    timpani(65, B + 3.8, 0.8); cymbal(B + 3.8, 0.6, 0.5);      // ジャン！
     // 6. キラキラ
     [2093, 2637, 3136, 3520, 4186, 3520, 3136, 2637, 3136, 3520, 4186, 5274, 4186, 5274].forEach((f, i) =>
-      tone("sine", f, 0, 5.2 + i * 0.13, 0.28, 0.12));
+      tone("sine", f, 0, B + 2.0 + i * 0.13, 0.28, 0.12));
     return SECRET_LEN;
   }
   let audioCtx = null;
@@ -520,7 +527,7 @@
       if (!audioCtx) audioCtx = new AC();
       if (audioCtx.state === "suspended") audioCtx.resume();
       const master = audioCtx.createGain(), comp = audioCtx.createDynamicsCompressor();
-      master.gain.value = 0.5;
+      master.gain.value = 0.75;   // 音量（前の 0.5 より大きく、音割れしない範囲）
       master.connect(comp).connect(audioCtx.destination);
       return secretSound(audioCtx, master);
     } catch (e) { /* 音が出せない環境では、色が変わるだけにする */ }

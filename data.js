@@ -229,7 +229,7 @@ const TEAMS = [
     "public": false,
     "name": "",
     "catch": "",
-    "icon": "",
+    "icon": "images/team6-icon.jpg",
     "image": "",
     "summary": "",
     "howto": [],
