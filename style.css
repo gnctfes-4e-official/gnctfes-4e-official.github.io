@@ -473,3 +473,14 @@ figcaption { font-size: .88rem; color: var(--ink-soft); margin-top: 6px; }
   padding: 0 8px;
 }
 .play-info dd { margin: 0; font-weight: 700; }
+
+/* ふりがな */
+ruby { ruby-align: center; }
+ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: center; }
+.d-title ruby rt, .card-name ruby rt { font-family: var(--font-body); font-weight: 900; }
+
+/* ことばの解説 */
+.glossary { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.glossary div { border-left: 6px solid var(--c); padding: 2px 0 2px 12px; }
+.glossary dt { font-weight: 900; font-size: 1.05rem; }
+.glossary dd { margin: 2px 0 0; max-width: 40em; }

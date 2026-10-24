@@ -7,7 +7,11 @@
     String(s ?? "").replace(/[&<>"']/g, (c) =>
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]
     );
-  const br = (s) => esc(s).replace(/\n/g, "<br>");
+  // data.js で {漢字|かんじ} と書くと、ふりがな付きで表示する
+  const RUBY = /\{([^|{}]+)\|([^{}]+)\}/g;
+  const plain = (s) => String(s ?? "").replace(RUBY, "$1");
+  const rb = (s) => esc(s).replace(RUBY, "<ruby>$1<rt>$2</rt></ruby>");
+  const br = (s) => rb(s).replace(/\n/g, "<br>");
   const ph = (text) => (SITE.showPlaceholders ? `<p class="ph">${esc(text)}</p>` : "");
   const teamName = (t) => t.name || `チーム${t.no}の作品`;
 
@@ -57,8 +61,8 @@
           </div>
           <div class="card-body">
             <p class="team-no">TEAM ${t.no}${t.sample ? `<span class="tag">記入例</span>` : ""}</p>
-            <h3 class="card-name">${esc(teamName(t))}</h3>
-            ${t.catch ? `<p class="card-catch">${esc(t.catch)}</p>` : ""}
+            <h3 class="card-name">${rb(teamName(t))}</h3>
+            ${t.catch ? `<p class="card-catch">${rb(t.catch)}</p>` : ""}
             <p class="more">くわしく見る<span aria-hidden="true"> →</span></p>
           </div>
         </a>
@@ -104,7 +108,7 @@
 
   function renderTeam(t) {
     setColor(t.color);
-    document.title = `${teamName(t)}｜めっちゃE科メレオン`;
+    document.title = `${plain(teamName(t))}｜めっちゃE科メレオン`;
     const i = TEAMS.indexOf(t);
     const prev = TEAMS[(i - 1 + TEAMS.length) % TEAMS.length];
     const next = TEAMS[(i + 1) % TEAMS.length];
@@ -121,7 +125,7 @@
     const howto =
       (playInfo ? `<dl class="play-info">${playInfo}</dl>` : "") +
       (t.howto.length
-        ? `<ol class="steps">${t.howto.map((s) => `<li>${br(s)}</li>`).join("")}</ol>`
+        ? `<ol class="steps">${t.howto.map((s) => `<li><span>${br(s)}</span></li>`).join("")}</ol>`
         : ph("ここに遊び方の手順が入ります。"));
 
     const chameleon = t.chameleon
@@ -135,12 +139,17 @@
     let techBody =
       (tech.text ? `<p>${br(tech.text)}</p>` : "") +
       (tech.parts && tech.parts.length
-        ? `<h3 class="sub">使った部品・技術</h3><ul class="chips">${tech.parts.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>`
+        ? `<h3 class="sub">使った部品・技術</h3><ul class="chips">${tech.parts.map((p) => `<li>${rb(p)}</li>`).join("")}</ul>`
         : "") +
       (tech.figure
-        ? `<figure class="fig"><a href="${esc(tech.figure)}" target="_blank" rel="noopener"><img src="${esc(tech.figure)}" alt="${esc(tech.figureCaption || "仕組みの図")}"></a>${tech.figureCaption ? `<figcaption>${esc(tech.figureCaption)}（タップで拡大）</figcaption>` : ""}</figure>`
+        ? `<figure class="fig"><a href="${esc(tech.figure)}" target="_blank" rel="noopener"><img src="${esc(tech.figure)}" alt="${esc(plain(tech.figureCaption) || "仕組みの図")}"></a>${tech.figureCaption ? `<figcaption>${rb(tech.figureCaption)}（タップで拡大）</figcaption>` : ""}</figure>`
         : "");
     if (!techBody) techBody = ph("ここに仕組みの解説（回路図・使った部品・プログラムの流れなど）が入ります。");
+
+    // ことばの解説：{ word: "{旋回手|せんかいしゅ}", desc: "説明" }
+    const glossary = (t.glossary || []).length
+      ? `<dl class="glossary">${t.glossary.map((g) => `<div><dt>${rb(g.word)}</dt><dd>${br(g.desc)}</dd></div>`).join("")}</dl>`
+      : "";
 
     const media = t.media.length
       ? `<div class="gallery">${t.media.map(mediaItem).join("")}</div>`
@@ -153,10 +162,10 @@
             <a class="back" href="#works"><span aria-hidden="true">← </span>作品一覧</a>
             <p class="team-no">TEAM ${t.no}</p>
             ${t.sample ? `<p class="sample">記入例（架空の作品です）</p>` : ""}
-            <h1 class="d-title">${esc(teamName(t))}</h1>
-            ${t.catch ? `<p class="d-catch">${esc(t.catch)}</p>` : ph("ここにキャッチコピーが入ります。")}
+            <h1 class="d-title">${rb(teamName(t))}</h1>
+            ${t.catch ? `<p class="d-catch">${rb(t.catch)}</p>` : ph("ここにキャッチコピーが入ります。")}
             <div class="d-visual">
-              ${t.image ? `<img src="${esc(t.image)}" alt="${esc(teamName(t))}">` : mascot()}
+              ${t.image ? `<img src="${esc(t.image)}" alt="${esc(plain(teamName(t)))}">` : mascot()}
             </div>
           </div>
         </header>
@@ -166,11 +175,12 @@
           ${section("見どころ", points)}
           ${section("カメレオンポイント", chameleon)}
           ${section("しくみ", techBody)}
+          ${section("ことばの解説", glossary)}
           ${section("写真・動画", media)}
         </main>
         <nav class="wrap pager" aria-label="ほかの作品">
-          <a href="#${esc(prev.id)}" data-c="${esc(prev.color)}"><span class="pager-dir">← まえの作品</span><span class="pager-name">TEAM ${prev.no}　${esc(teamName(prev))}</span></a>
-          <a href="#${esc(next.id)}" data-c="${esc(next.color)}"><span class="pager-dir">つぎの作品 →</span><span class="pager-name">TEAM ${next.no}　${esc(teamName(next))}</span></a>
+          <a href="#${esc(prev.id)}" data-c="${esc(prev.color)}"><span class="pager-dir">← まえの作品</span><span class="pager-name">TEAM ${prev.no}　${esc(plain(teamName(prev)))}</span></a>
+          <a href="#${esc(next.id)}" data-c="${esc(next.color)}"><span class="pager-dir">つぎの作品 →</span><span class="pager-name">TEAM ${next.no}　${esc(plain(teamName(next)))}</span></a>
         </nav>
         ${footer()}
       </div>`;
@@ -178,12 +188,12 @@
   }
 
   function mediaItem(m) {
-    const cap = m.caption ? `<figcaption>${esc(m.caption)}</figcaption>` : "";
+    const cap = m.caption ? `<figcaption>${rb(m.caption)}</figcaption>` : "";
     if (m.type === "video")
-      return `<figure><video src="${esc(m.src)}" controls playsinline preload="metadata"></video>${cap}</figure>`;
+      return `<figure><video src="${esc(m.src)}"${m.poster ? ` poster="${esc(m.poster)}"` : ""} controls playsinline preload="metadata"></video>${cap}</figure>`;
     if (m.type === "link")
       return `<a class="media-link" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${esc(m.caption || "動画を見る")}<span aria-hidden="true"> ↗</span></a>`;
-    return `<figure><img src="${esc(m.src)}" alt="${esc(m.caption || "")}" loading="lazy">${cap}</figure>`;
+    return `<figure><img src="${esc(m.src)}" alt="${esc(plain(m.caption))}" loading="lazy">${cap}</figure>`;
   }
 
   function footer() {

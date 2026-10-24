@@ -1,104 +1,177 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="540" viewBox="0 0 1020 540" font-family="'Hiragino Sans','Yu Gothic','Meiryo',sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="640" viewBox="0 0 1100 640" font-family="'Hiragino Sans','Yu Gothic','Meiryo',sans-serif">
   <defs>
     <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0 0L10 5L0 10z" fill="#15331F"/>
     </marker>
+
+    <!-- ロータリーエンコーダ -->
+    <symbol id="enc" viewBox="0 0 64 64">
+      <path d="M12 16 A22 8 0 0 1 50 14" fill="none" stroke="#E0661F" stroke-width="3" stroke-linecap="round"/>
+      <path d="M44 8 L52 14 L44 19 Z" fill="#E0661F"/>
+      <rect x="10" y="34" width="44" height="20" rx="3" fill="#8C9A92" stroke="#15331F" stroke-width="2.5"/>
+      <rect x="24" y="14" width="16" height="22" rx="2" fill="#D7DCD8" stroke="#15331F" stroke-width="2.5"/>
+      <path d="M28 16V34M32 16V34M36 16V34" stroke="#9AA39E" stroke-width="1.5"/>
+      <path d="M20 54V62M32 54V62M44 54V62" stroke="#15331F" stroke-width="2.5"/>
+    </symbol>
+
+    <!-- ペダルスイッチ -->
+    <symbol id="pedal" viewBox="0 0 64 64">
+      <path d="M40 4 V20" stroke="#E0661F" stroke-width="3" stroke-linecap="round"/>
+      <path d="M33 16 L40 25 L47 16" fill="none" stroke="#E0661F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M6 50 H58 V58 H6 Z" fill="#3A3F3C" stroke="#15331F" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M8 48 L52 30 L57 40 L13 52 Z" fill="#5E6662" stroke="#15331F" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M20 46 L48 35 M24 49 L52 38" stroke="#8C9A92" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- CdSセル -->
+    <symbol id="cds" viewBox="0 0 64 64">
+      <path d="M8 4 L17 13 M2 16 L13 20 M20 1 L23 11" stroke="#E0A800" stroke-width="3" stroke-linecap="round"/>
+      <path d="M26 46V62M38 46V62" stroke="#15331F" stroke-width="2.5"/>
+      <circle cx="32" cy="34" r="14" fill="#F2C46B" stroke="#15331F" stroke-width="2.5"/>
+      <path d="M23 28 H41 V31 H23 V34 H41 V37 H23 V40 H41" fill="none" stroke="#B24A2A" stroke-width="1.8" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- Arduino -->
+    <symbol id="ard" viewBox="0 0 120 76">
+      <rect x="2" y="2" width="116" height="72" rx="6" fill="#1F7FC4" stroke="#15331F" stroke-width="2.5"/>
+      <rect x="2" y="12" width="20" height="18" fill="#C9CFCB" stroke="#15331F" stroke-width="2"/>
+      <rect x="4" y="48" width="14" height="16" rx="2" fill="#2B2B2B"/>
+      <rect x="40" y="7" width="72" height="7" fill="#2B2B2B"/>
+      <rect x="50" y="62" width="62" height="7" fill="#2B2B2B"/>
+      <rect x="58" y="36" width="44" height="12" fill="#2B2B2B"/>
+      <text x="32" y="44" font-size="11" font-weight="700" fill="#FFFFFF">UNO</text>
+    </symbol>
+
+    <!-- ノートパソコン -->
+    <symbol id="pc" viewBox="0 0 100 70">
+      <rect x="14" y="4" width="72" height="46" rx="4" fill="#2B2F2D" stroke="#15331F" stroke-width="2.5"/>
+      <rect x="19" y="9" width="62" height="36" fill="#9FD0F2"/>
+      <rect x="19" y="32" width="62" height="13" fill="#2F7BBF"/>
+      <path d="M44 18 L56 18 M50 14 L50 23 M47 22 L53 22" stroke="#2B2F2D" stroke-width="2" stroke-linecap="round"/>
+      <path d="M4 54 H96 L90 64 H10 Z" fill="#C9CFCB" stroke="#15331F" stroke-width="2.5" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- プロジェクター -->
+    <symbol id="proj" viewBox="0 0 64 64">
+      <path d="M40 38 L62 20 L62 62 L40 46 Z" fill="#FFE14D"/>
+      <rect x="2" y="30" width="40" height="24" rx="5" fill="#E9ECEA" stroke="#15331F" stroke-width="2.5"/>
+      <circle cx="33" cy="42" r="6.5" fill="#2B2F2D" stroke="#15331F" stroke-width="2"/>
+      <path d="M9 37 H22 M9 42 H22" stroke="#8C9A92" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- スピーカー -->
+    <symbol id="spk" viewBox="0 0 64 64">
+      <path d="M6 24 H18 L32 12 V52 L18 40 H6 Z" fill="#5E6662" stroke="#15331F" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M40 24 Q46 32 40 40 M47 17 Q58 32 47 47" fill="none" stroke="#E0661F" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
   </defs>
 
-  <rect width="1020" height="540" fill="#FFFFFF"/>
+  <rect width="1100" height="640" fill="#FFFFFF"/>
 
   <!-- 列の見出し -->
   <g font-size="22" font-weight="700" fill="#15331F" text-anchor="middle">
-    <text x="130" y="40">入力</text>
-    <text x="405" y="40">マイコン</text>
-    <text x="665" y="40">PC</text>
-    <text x="915" y="40">出力</text>
+    <text x="160" y="40">入力</text>
+    <text x="460" y="40">マイコン</text>
+    <text x="720" y="40">パソコン</text>
+    <text x="985" y="40">出力</text>
   </g>
 
   <!-- 入力 -->
   <g stroke="#15331F" stroke-width="3" fill="#E6F4DC">
-    <rect x="20" y="70" width="220" height="72" rx="12"/>
-    <rect x="20" y="160" width="220" height="72" rx="12"/>
-    <rect x="20" y="250" width="220" height="72" rx="12"/>
-    <rect x="20" y="340" width="220" height="72" rx="12"/>
+    <rect x="20" y="70" width="280" height="96" rx="12"/>
+    <rect x="20" y="180" width="280" height="96" rx="12"/>
+    <rect x="20" y="290" width="280" height="96" rx="12"/>
+    <rect x="20" y="400" width="280" height="96" rx="12"/>
   </g>
-  <g fill="#15331F" text-anchor="middle">
-    <text x="130" y="100" font-size="18" font-weight="700">ロータリーエンコーダ</text>
-    <text x="130" y="125" font-size="14">旋回ハンドル（横の動き）</text>
-    <text x="130" y="190" font-size="18" font-weight="700">ロータリーエンコーダ</text>
-    <text x="130" y="215" font-size="14">俯仰ハンドル（縦の動き）</text>
-    <text x="130" y="280" font-size="18" font-weight="700">ペダルスイッチ ×2</text>
-    <text x="130" y="305" font-size="14">トリガー（発砲）</text>
-    <text x="130" y="370" font-size="18" font-weight="700">CdSセル ×3</text>
-    <text x="130" y="395" font-size="14">弾倉の装填を検知</text>
+  <use href="#enc" x="32" y="86" width="64" height="64"/>
+  <use href="#enc" x="32" y="196" width="64" height="64"/>
+  <use href="#pedal" x="32" y="306" width="64" height="64"/>
+  <use href="#cds" x="32" y="416" width="64" height="64"/>
+  <g fill="#15331F">
+    <text x="108" y="108" font-size="16" font-weight="700">ロータリーエンコーダ</text>
+    <text x="108" y="132" font-size="13">旋回（せんかい）ハンドル：</text>
+    <text x="108" y="150" font-size="13">横の向きを合わせる</text>
+    <text x="108" y="218" font-size="16" font-weight="700">ロータリーエンコーダ</text>
+    <text x="108" y="242" font-size="13">俯仰（ふぎょう）ハンドル：</text>
+    <text x="108" y="260" font-size="13">上下の角度を合わせる</text>
+    <text x="108" y="334" font-size="16" font-weight="700">ペダルスイッチ ×2</text>
+    <text x="108" y="358" font-size="13">足でふむと発砲する</text>
+    <text x="108" y="438" font-size="16" font-weight="700">CdSセル ×3</text>
+    <text x="108" y="462" font-size="13">光で弾倉（だんそう）の</text>
+    <text x="108" y="480" font-size="13">出し入れを見分ける</text>
   </g>
 
   <!-- マイコン -->
-  <rect x="310" y="70" width="190" height="342" rx="14" fill="#BFE8C4" stroke="#15331F" stroke-width="3"/>
+  <rect x="360" y="70" width="200" height="426" rx="14" fill="#BFE8C4" stroke="#15331F" stroke-width="3"/>
+  <use href="#ard" x="400" y="88" width="120" height="76"/>
   <g fill="#15331F" text-anchor="middle">
-    <text x="405" y="106" font-size="19" font-weight="700">Arduino Uno R3</text>
-    <text x="405" y="130" font-size="14">（互換品 ELEGOO）</text>
+    <text x="460" y="194" font-size="18" font-weight="700">Arduino Uno R3</text>
+    <text x="460" y="216" font-size="13">（互換品）</text>
   </g>
-  <line x1="326" y1="146" x2="484" y2="146" stroke="#15331F" stroke-width="1.5"/>
+  <line x1="376" y1="230" x2="544" y2="230" stroke="#15331F" stroke-width="1.5"/>
   <g fill="#15331F" font-size="14">
-    <text x="324" y="190">① センサの値を読む</text>
-    <text x="324" y="240">② 値を解釈・整頓</text>
-    <text x="324" y="290">③ 文字列にして</text>
-    <text x="324" y="312">　 PCへ送る</text>
+    <text x="374" y="268">① センサの値を読む</text>
+    <text x="374" y="310">② 値を解釈・整頓</text>
+    <text x="374" y="352">③ 文字列にして</text>
+    <text x="374" y="372">　 パソコンへ送る</text>
   </g>
 
-  <!-- PC -->
-  <rect x="570" y="70" width="190" height="342" rx="14" fill="#FFE0CC" stroke="#15331F" stroke-width="3"/>
+  <!-- パソコン -->
+  <rect x="620" y="70" width="200" height="426" rx="14" fill="#FFE0CC" stroke="#15331F" stroke-width="3"/>
+  <use href="#pc" x="670" y="90" width="100" height="70"/>
   <g fill="#15331F" text-anchor="middle">
-    <text x="665" y="106" font-size="19" font-weight="700">Godot</text>
-    <text x="665" y="130" font-size="14">（ゲームエンジン）</text>
+    <text x="720" y="194" font-size="18" font-weight="700">Godot</text>
+    <text x="720" y="216" font-size="13">（ゲームエンジン）</text>
   </g>
-  <line x1="586" y1="146" x2="744" y2="146" stroke="#15331F" stroke-width="1.5"/>
+  <line x1="636" y1="230" x2="804" y2="230" stroke="#15331F" stroke-width="1.5"/>
   <g fill="#15331F" font-size="14">
-    <text x="584" y="190">① 文字列を受け取る</text>
-    <text x="584" y="240">② 照準・発砲・装填に</text>
-    <text x="584" y="262">　 反映する</text>
-    <text x="584" y="312">③ 敵機を動かし、</text>
-    <text x="584" y="334">　 命中を判定する</text>
-    <text x="584" y="384">④ 時間と点数を表示</text>
+    <text x="634" y="268">① 文字列を受け取る</text>
+    <text x="634" y="310">② 照準・発砲・装填に</text>
+    <text x="634" y="330">　 反映する</text>
+    <text x="634" y="372">③ 敵機を動かし、</text>
+    <text x="634" y="392">　 命中を判定する</text>
+    <text x="634" y="434">④ 時間と点数を表示</text>
   </g>
 
   <!-- 出力 -->
   <g stroke="#15331F" stroke-width="3" fill="#FFF4C2">
-    <rect x="830" y="130" width="170" height="72" rx="12"/>
-    <rect x="830" y="250" width="170" height="72" rx="12"/>
+    <rect x="880" y="150" width="200" height="96" rx="12"/>
+    <rect x="880" y="330" width="200" height="96" rx="12"/>
   </g>
-  <g fill="#15331F" text-anchor="middle">
-    <text x="915" y="160" font-size="18" font-weight="700">画面</text>
-    <text x="915" y="185" font-size="14">ゲームの映像</text>
-    <text x="915" y="280" font-size="18" font-weight="700">音</text>
-    <text x="915" y="305" font-size="14">発砲音などの効果音</text>
+  <use href="#proj" x="890" y="166" width="64" height="64"/>
+  <use href="#spk" x="890" y="346" width="64" height="64"/>
+  <g fill="#15331F">
+    <text x="962" y="190" font-size="16" font-weight="700">プロジェクター</text>
+    <text x="962" y="214" font-size="13">ゲームの映像を</text>
+    <text x="962" y="232" font-size="13">大きく映す</text>
+    <text x="962" y="370" font-size="16" font-weight="700">効果音</text>
+    <text x="962" y="394" font-size="13">発砲音など</text>
   </g>
 
   <!-- 矢印 -->
   <g stroke="#15331F" stroke-width="2.5" marker-end="url(#a)">
-    <line x1="240" y1="106" x2="308" y2="106"/>
-    <line x1="240" y1="196" x2="308" y2="196"/>
-    <line x1="240" y1="286" x2="308" y2="286"/>
-    <line x1="240" y1="376" x2="308" y2="376"/>
-    <line x1="500" y1="241" x2="568" y2="241"/>
-    <line x1="760" y1="166" x2="828" y2="166"/>
-    <line x1="760" y1="286" x2="828" y2="286"/>
+    <line x1="300" y1="118" x2="358" y2="118"/>
+    <line x1="300" y1="228" x2="358" y2="228"/>
+    <line x1="300" y1="338" x2="358" y2="338"/>
+    <line x1="300" y1="448" x2="358" y2="448"/>
+    <line x1="560" y1="283" x2="618" y2="283"/>
+    <line x1="820" y1="198" x2="878" y2="198"/>
+    <line x1="820" y1="378" x2="878" y2="378"/>
   </g>
-  <g fill="#15331F" font-size="13" text-anchor="middle">
-    <text x="274" y="98">回転</text>
-    <text x="274" y="188">回転</text>
-    <text x="274" y="278">ON/OFF</text>
-    <text x="274" y="368">明るさ</text>
-    <text x="534" y="226">シリアル</text>
-    <text x="534" y="263">通信</text>
+  <g fill="#15331F" font-size="12" text-anchor="middle">
+    <text x="329" y="110">回転</text>
+    <text x="329" y="220">回転</text>
+    <text x="329" y="330">ON/OFF</text>
+    <text x="329" y="440">明るさ</text>
+    <text x="589" y="270">シリアル</text>
+    <text x="589" y="304">通信</text>
   </g>
 
   <!-- 送られる文字列の例 -->
-  <text x="310" y="446" font-size="13" fill="#15331F">シリアル通信で PC に送られる文字列の例</text>
-  <rect x="310" y="456" width="450" height="68" rx="10" fill="#15331F"/>
+  <text x="360" y="538" font-size="13" fill="#15331F">シリアル通信でパソコンに送られる文字列の例</text>
+  <rect x="360" y="548" width="460" height="68" rx="10" fill="#15331F"/>
   <g font-family="'Consolas','MS Gothic',monospace" font-size="14" fill="#C8F7C5">
-    <text x="326" y="484">俯仰:0 旋回:0 外トリガー:false 内トリガー:false</text>
-    <text x="326" y="508">弾倉1:false 弾倉2:false 弾倉3:false</text>
+    <text x="376" y="576">俯仰:0 旋回:0 外トリガー:false 内トリガー:false</text>
+    <text x="376" y="600">弾倉1:false 弾倉2:false 弾倉3:false</text>
   </g>
 </svg>
