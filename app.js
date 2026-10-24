@@ -101,7 +101,6 @@
               <span><span class="insta-label">公式 Instagram</span><span class="insta-name">${esc(SITE.instagram.name)}</span></span>
               <span class="insta-arrow" aria-hidden="true">↗</span>
             </a>` : ""}
-            <p class="crowd" id="crowd" role="status" hidden></p>
           </div>
           <div class="hero-art">
             ${SITE.logo ? (SITE.department && SITE.department.url
@@ -129,7 +128,6 @@
       ${footer()}`;
     paint();
     initVote();
-    updateCrowd();
 
     // アイコン画像がまだ無いときはカメレオンの絵に差しかえる
     const logo = app.querySelector(".logo");
@@ -370,32 +368,6 @@
       }
     });
   }
-
-  /* ---------- 混雑状況（1分ごとに更新） ---------- */
-  let crowdData = null;
-  async function updateCrowd(force) {
-    const el = document.getElementById("crowd");
-    if (!LIVE.crowd || !LIVE.endpoint || SITE.preview) {
-      if (el && SITE.preview && LIVE.crowd) {
-        el.hidden = false;
-        el.innerHTML = `いまの会場：<b class="lv lv-low">空いています</b>（会場内 約8人）<small>見本の表示</small>`;
-      }
-      return;
-    }
-    if (force || !crowdData) {
-      try {
-        const res = await fetch(LIVE.endpoint + "?action=status");
-        crowdData = await res.json();
-      } catch (e) { crowdData = null; }
-    }
-    const c = crowdData;
-    if (!el) return;
-    if (!c || !c.ok || !c.show) { el.hidden = true; return; }
-    const cls = c.level === "混雑" ? "lv-high" : c.level === "やや混雑" ? "lv-mid" : "lv-low";
-    el.hidden = false;
-    el.innerHTML = `いまの会場：<b class="lv ${cls}">${esc(c.level)}</b>${c.inside != null ? `（会場内 約${c.inside}人）` : ""}<small>${esc(c.updated || "")} 更新</small>`;
-  }
-  if (LIVE.crowd && LIVE.endpoint && !SITE.preview) setInterval(() => updateCrowd(true), 60000);
 
   function footer() {
     return `

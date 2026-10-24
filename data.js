@@ -45,8 +45,7 @@ const SITE = {
       "lead": "おもしろかった・印象に残ったブースに1票！（1台につき1日1回）",
       "thanks": "投票ありがとう！",
       "ask": "高専祭の学科別投票では、ぜひ「電気情報工学科」に投票お願いします！"
-    },
-    "crowd": true
+    }
   },
   "instagram": {
     "url": "https://www.instagram.com/gnctfes_4e_official/",

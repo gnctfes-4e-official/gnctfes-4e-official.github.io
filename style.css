@@ -641,22 +641,6 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
   .logo-link .logo { transition: none; }
 }
 
-/* 混雑状況 */
-.crowd {
-  margin: 16px 0 0;
-  font-weight: 700;
-  font-size: .92rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 6px;
-}
-.crowd small { color: var(--ink-soft); font-weight: 500; margin-left: 4px; }
-.lv { border: 2px solid var(--ink); border-radius: 999px; padding: 0 10px; }
-.lv-low { background: #BFE8C4; }
-.lv-mid { background: var(--volt); }
-.lv-high { background: #FF8A80; }
-
 /* 投票 */
 .vote-sec { padding-block: 0 56px; }
 .vote-box {
