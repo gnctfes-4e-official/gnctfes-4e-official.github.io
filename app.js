@@ -16,6 +16,12 @@
   const teamName = (t) => t.name || `チーム${t.no}の作品`;
   // 作品名が入っていないチーム（または secret: true）は「COMING SOON」で中身を隠す
   const isOpen = (t) => !!t.name && !t.secret;
+  // 「TEAM 2　サッカー」のような見出し
+  const teamLabel = (t) => `TEAM ${t.no}${t.nickname ? `<span class="nick">${esc(t.nickname)}</span>` : ""}`;
+  // 確認用プレビューのときだけ出す目印
+  const previewBar = () => SITE.preview
+    ? `<div class="preview-bar">確認用プレビュー（非公開）：公開サイトでは「非公開」の作品は COMING SOON になります</div>` : "";
+  const privTag = (t) => (SITE.preview && !t.public ? `<span class="tag">非公開</span>` : "");
 
   // カメレオン（体の色は currentColor、舌は電気）
   const mascot = (cls = "") => `
@@ -62,9 +68,8 @@
             ${t.icon ? `<img src="${esc(t.icon)}" alt="">` : mascot()}
           </div>
           <div class="card-body">
-            <p class="team-no">TEAM ${t.no}${t.sample ? `<span class="tag">記入例</span>` : ""}</p>
+            <p class="team-no">${teamLabel(t)}${privTag(t)}</p>
             <h3 class="card-name">${rb(teamName(t))}</h3>
-            ${t.catch ? `<p class="card-catch">${rb(t.catch)}</p>` : ""}
             <p class="more">くわしく見る<span aria-hidden="true"> →</span></p>
           </div>
         </a>
@@ -73,14 +78,13 @@
         <div class="card card-soon">
           <div class="card-art">${mascot()}<span class="soon-mark" aria-hidden="true">？</span></div>
           <div class="card-body">
-            <p class="team-no">TEAM ${t.no}</p>
+            <p class="team-no">${teamLabel(t)}</p>
             <h3 class="card-name">COMING SOON</h3>
-            <p class="card-catch">公開までお楽しみに！</p>
           </div>
         </div>
       </li>`).join("");
 
-    app.innerHTML = `
+    app.innerHTML = previewBar() + `
       <header class="hero">
         <div class="wrap hero-inner">
           <div class="hero-text">
@@ -103,6 +107,14 @@
           </div>
         </div>
       </header>
+      ${SITE.about && SITE.about.text ? `
+      <section class="wrap about" id="about">
+        <h2 class="sec-title">${esc(SITE.about.title)}</h2>
+        <div class="about-box">
+          <p>${br(SITE.about.text)}</p>
+          ${SITE.about.source ? `<p class="about-src">参考：<a href="${esc(SITE.about.source.url)}" target="_blank" rel="noopener noreferrer">${esc(SITE.about.source.label)}</a></p>` : ""}
+        </div>
+      </section>` : ""}
       <main class="wrap works" id="works">
         <h2 class="sec-title">${TEAMS.length}つの作品</h2>
         <ul class="cards">${cards}</ul>
@@ -180,13 +192,12 @@
       ? `<div class="gallery">${t.media.map(mediaItem).join("")}</div>`
       : ph("ここに写真や動画が入ります。");
 
-    app.innerHTML = `
+    app.innerHTML = previewBar() + `
       <div class="detail">
         <header class="d-hero">
           <div class="wrap d-hero-inner">
             <a class="back" href="#works"><span aria-hidden="true">← </span>作品一覧</a>
-            <p class="team-no">TEAM ${t.no}</p>
-            ${t.sample ? `<p class="sample">記入例（架空の作品です）</p>` : ""}
+            <p class="team-no">${teamLabel(t)}${privTag(t)}</p>
             <h1 class="d-title">${rb(teamName(t))}</h1>
             ${t.catch ? `<p class="d-catch">${rb(t.catch)}</p>` : ph("ここにキャッチコピーが入ります。")}
             <div class="d-visual">
@@ -215,13 +226,13 @@
 
   function renderSoon(t) {
     setColor(t.color);
-    document.title = `TEAM ${t.no}｜めっちゃE科メレオン`;
-    app.innerHTML = `
+    document.title = `TEAM ${t.no} ${t.nickname || ""}｜めっちゃE科メレオン`;
+    app.innerHTML = previewBar() + `
       <div class="detail">
         <header class="d-hero">
           <div class="wrap d-hero-inner">
             <a class="back" href="#works"><span aria-hidden="true">← </span>作品一覧</a>
-            <p class="team-no">TEAM ${t.no}</p>
+            <p class="team-no">${teamLabel(t)}</p>
             <h1 class="d-title">COMING SOON</h1>
             <p class="d-catch">この作品の紹介は準備中です。公開までお楽しみに！</p>
             <div class="d-visual soon-visual">${mascot()}<span class="soon-mark" aria-hidden="true">？</span></div>

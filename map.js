@@ -49,8 +49,7 @@ function buildMapSVG(opts) {
   for (const b of booths) {
     const t = TEAMS.find((x) => x.id === b.team) || { no: "?", color: "#BBBBBB" };
     const on = !o.highlight || o.highlight === b.team;
-    const secret = o.links && (!t.name || t.secret);
-    const label = secret ? "？？？" : b.label;
+    const label = b.label;
     const x = px(b.x), y = py(b.y), w = b.w * S, h = b.h * S, cx = x + w / 2, cy = y + h / 2;
     const fill = on ? tint(t.color, o.highlight ? 0.15 : 0.55) : "#F7F8F6";
     const stroke = on ? INK : "#B9C2BC";
@@ -58,7 +57,7 @@ function buildMapSVG(opts) {
     g += `<circle cx="${cx}" cy="${cy - 26 * k}" r="${17 * k}" fill="${on ? t.color : "#DDE2DE"}" stroke="${stroke}" stroke-width="2.5"/>`;
     g += `<text x="${cx}" y="${cy - 20 * k}" font-size="${17 * k}" font-weight="900" fill="${on ? INK : "#9AA6A0"}" text-anchor="middle">${t.no}</text>`;
     g += `<text x="${cx}" y="${cy + 14 * k}" font-size="${(label.length > 4 ? 16 : 19) * k}" font-weight="900" fill="${on ? INK : "#9AA6A0"}" text-anchor="middle">${esc(label)}</text>`;
-    g += `<text x="${cx}" y="${cy + 36 * k}" font-size="${12 * k}" fill="${on ? "#46604F" : "#B0B9B4"}" text-anchor="middle">${secret ? "COMING SOON" : `${fmt(b.w)}×${fmt(b.h)}m`}</text>`;
+    g += `<text x="${cx}" y="${cy + 36 * k}" font-size="${12 * k}" fill="${on ? "#46604F" : "#B0B9B4"}" text-anchor="middle">${fmt(b.w)}×${fmt(b.h)}m</text>`;
     // ブースの入り口の矢印（通路からブースへ）
     const L = 0.75 * S, gap = 0.12 * S, col = on ? INK : "#C6CEC9";
     if (b.door === "bottom") g += arrow(cx, y + h + gap + L, cx, y + h + gap, col, 5);
@@ -66,7 +65,7 @@ function buildMapSVG(opts) {
     if (b.door === "left") g += arrow(x - gap - L, cy, x - gap, cy, col, 5);
     if (b.door === "right") g += arrow(x + w + gap + L, cy, x + w + gap, cy, col, 5);
     const name = `TEAM ${t.no} ${label}`;
-    svg += o.links && !secret
+    svg += o.links
       ? `<a href="#${esc(b.team)}" class="booth" aria-label="${esc(name)}の作品ページへ"><title>${esc(name)}</title>${g}</a>`
       : `<g>${g}</g>`;
   }
