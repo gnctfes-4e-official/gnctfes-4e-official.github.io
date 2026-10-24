@@ -91,7 +91,7 @@
             <p class="eyebrow">${esc(SITE.school)}<br>${esc(SITE.event)}</p>
             <h1 class="title">
               <span class="t-small">めっちゃ</span>
-              <span class="t-big"><span class="e">E</span>科メレオン</span>
+              <span class="t-big"><span class="e" id="secret-e">E</span>科メレオン</span>
             </h1>
             <p class="lead">${br(SITE.intro)}</p>
             ${info ? `<dl class="info">${info}</dl>` : ""}
@@ -103,7 +103,12 @@
             </a>` : ""}
           </div>
           <div class="hero-art">
-            ${SITE.logo ? `<img class="logo" src="${esc(SITE.logo)}" alt="めっちゃE科メレオンのアイコン">` : mascot("cycle")}
+            ${SITE.logo ? (SITE.department && SITE.department.url
+              ? `<a class="logo-link" href="${esc(SITE.department.url)}" target="_blank" rel="noopener noreferrer">
+                  <img class="logo" src="${esc(SITE.logo)}" alt="${esc(SITE.department.name)}のサイトを開く">
+                  <span class="logo-hint">${esc(SITE.department.name)}のサイトへ<span aria-hidden="true"> ↗</span></span>
+                </a>`
+              : `<img class="logo" src="${esc(SITE.logo)}" alt="めっちゃE科メレオンのアイコン">`) : mascot("cycle")}
           </div>
         </div>
       </header>
@@ -262,6 +267,42 @@
         </div>
       </footer>`;
   }
+
+  /* ---------- 隠しコマンド ----------
+   * ・タイトルの「E」を 3 秒以内に 5 回タップ
+   * ・キーボードで ↑↑↓↓←→←→BA
+   * → 10 秒間、サイト全体がカメレオンのように色を変える */
+  let secretTimer = 0;
+  function chameleonMode() {
+    document.documentElement.classList.add("chameleon-mode");
+    let toast = document.getElementById("secret-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "secret-toast";
+      toast.setAttribute("role", "status");
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = "<b>隠しコマンド発見！</b><br>めっちゃカメレオンモード発動中…";
+    toast.hidden = false;
+    clearTimeout(secretTimer);
+    secretTimer = setTimeout(() => {
+      document.documentElement.classList.remove("chameleon-mode");
+      toast.hidden = true;
+    }, 10000);
+  }
+  let taps = [];
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#secret-e")) return;
+    const now = Date.now();
+    taps = taps.filter((t) => now - t < 3000).concat(now);
+    if (taps.length >= 5) { taps = []; chameleonMode(); }
+  });
+  const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+  let keys = [];
+  document.addEventListener("keydown", (e) => {
+    keys = keys.concat(e.key.length === 1 ? e.key.toLowerCase() : e.key).slice(-KONAMI.length);
+    if (keys.join() === KONAMI.join()) { keys = []; chameleonMode(); }
+  });
 
   /* ---------- 画面の切りかえ（#team1 など） ---------- */
   function route() {

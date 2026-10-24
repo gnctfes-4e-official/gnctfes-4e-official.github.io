@@ -598,3 +598,45 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
 }
 .about-quote p { margin: 0; }
 .about-quote cite { display: block; margin-top: 6px; font-style: normal; font-size: .8rem; font-weight: 500; color: var(--ink-soft); }
+
+/* カメレオンのアイコン → 学科サイトへ */
+.logo-link { display: block; text-decoration: none; }
+.logo-link .logo { transition: transform .15s ease, box-shadow .15s ease; }
+.logo-link:hover .logo, .logo-link:focus-visible .logo { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--ink); }
+.logo-hint {
+  display: block;
+  width: fit-content;
+  margin: 14px auto 0;
+  font-weight: 900;
+  font-size: .85rem;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 2px 14px;
+}
+
+/* 隠しコマンド：めっちゃカメレオンモード */
+#secret-e { cursor: pointer; -webkit-user-select: none; user-select: none; }
+.chameleon-mode #app { animation: chameleon-page 2.4s linear infinite; }
+@keyframes chameleon-page { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
+#secret-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 20;
+  background: var(--ink);
+  color: var(--volt);
+  border: 3px solid var(--volt);
+  border-radius: 14px;
+  padding: 10px 18px;
+  text-align: center;
+  font-size: .95rem;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.25);
+  width: max-content;
+  max-width: calc(100% - 32px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .chameleon-mode #app { animation: none; filter: hue-rotate(120deg); }
+  .logo-link .logo { transition: none; }
+}

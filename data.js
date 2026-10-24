@@ -11,6 +11,10 @@ const SITE = {
       "url": "https://store.steampowered.com/app/4704690/"
     }
   },
+  "department": {
+    "url": "https://www.gifu-nct.ac.jp/elec/index.html",
+    "name": "岐阜高専 電気情報工学科"
+  },
   "instagram": {
     "url": "https://www.instagram.com/gnctfes_4e_official/",
     "name": "@gnctfes_4e_official"
