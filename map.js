@@ -49,22 +49,25 @@ function buildMapSVG(opts) {
   for (const b of booths) {
     const t = TEAMS.find((x) => x.id === b.team) || { no: "?", color: "#BBBBBB" };
     const on = !o.highlight || o.highlight === b.team;
-    const label = b.label;
+    const label = b.label;                     // \n で2行に分けられる
+    const lines = label.split("\n");
+    const longest = Math.max(...lines.map((l) => l.length));
     const x = px(b.x), y = py(b.y), w = b.w * S, h = b.h * S, cx = x + w / 2, cy = y + h / 2;
     const fill = on ? tint(t.color, o.highlight ? 0.15 : 0.55) : "#F7F8F6";
     const stroke = on ? INK : "#B9C2BC";
     let g = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}" stroke-width="${o.highlight === b.team ? 5 : 2.5}"/>`;
     g += `<circle cx="${cx}" cy="${cy - 26 * k}" r="${17 * k}" fill="${on ? t.color : "#DDE2DE"}" stroke="${stroke}" stroke-width="2.5"/>`;
     g += `<text x="${cx}" y="${cy - 20 * k}" font-size="${17 * k}" font-weight="900" fill="${on ? INK : "#9AA6A0"}" text-anchor="middle">${t.no}</text>`;
-    g += `<text x="${cx}" y="${cy + 14 * k}" font-size="${(label.length > 4 ? 16 : 19) * k}" font-weight="900" fill="${on ? INK : "#9AA6A0"}" text-anchor="middle">${esc(label)}</text>`;
-    g += `<text x="${cx}" y="${cy + 36 * k}" font-size="${12 * k}" fill="${on ? "#46604F" : "#B0B9B4"}" text-anchor="middle">${fmt(b.w)}×${fmt(b.h)}m</text>`;
+    const fsz = Math.min((longest > 4 ? 16 : 19) * k, (w * 0.88) / longest);
+    g += `<text x="${cx}" y="${cy + 14 * k - (lines.length - 1) * fsz * 0.2}" font-size="${fsz}" font-weight="900" fill="${on ? INK : "#9AA6A0"}" text-anchor="middle">${lines.map((l, i) => `<tspan x="${cx}" dy="${i ? fsz * 1.15 : 0}">${esc(l)}</tspan>`).join("")}</text>`;
+    g += `<text x="${cx}" y="${cy + 36 * k + (lines.length - 1) * fsz * 0.95}" font-size="${12 * k}" fill="${on ? "#46604F" : "#B0B9B4"}" text-anchor="middle">${fmt(b.w)}×${fmt(b.h)}m</text>`;
     // ブースの入り口の矢印（通路からブースへ）
     const L = 0.75 * S, gap = 0.12 * S, col = on ? INK : "#C6CEC9";
     if (b.door === "bottom") g += arrow(cx, y + h + gap + L, cx, y + h + gap, col, 5);
     if (b.door === "top") g += arrow(cx, y - gap - L, cx, y - gap, col, 5);
     if (b.door === "left") g += arrow(x - gap - L, cy, x - gap, cy, col, 5);
     if (b.door === "right") g += arrow(x + w + gap + L, cy, x + w + gap, cy, col, 5);
-    const name = `TEAM ${t.no} ${label}`;
+    const name = `TEAM ${t.no} ${lines.join("")}`;
     svg += o.links
       ? `<a href="#${esc(b.team)}" class="booth" aria-label="${esc(name)}の作品ページへ"><title>${esc(name)}</title>${g}</a>`
       : `<g>${g}</g>`;
