@@ -111,6 +111,7 @@
       <section class="wrap about" id="about">
         <h2 class="sec-title">${esc(SITE.about.title)}</h2>
         <div class="about-box">
+          ${SITE.about.quote ? `<blockquote class="about-quote"><p>${br(SITE.about.quote)}</p><cite>— 公式の紹介文より</cite></blockquote>` : ""}
           <p>${br(SITE.about.text)}</p>
           ${SITE.about.source ? `<p class="about-src">参考：<a href="${esc(SITE.about.source.url)}" target="_blank" rel="noopener noreferrer">${esc(SITE.about.source.label)}</a></p>` : ""}
         </div>
