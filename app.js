@@ -113,15 +113,8 @@
           </div>
         </div>
       </header>
-      ${SITE.about && SITE.about.text ? `
-      <section class="wrap about" id="about">
-        <h2 class="sec-title">${esc(SITE.about.title)}</h2>
-        <div class="about-box">
-          ${SITE.about.quote ? `<blockquote class="about-quote"><p>${br(SITE.about.quote)}</p><cite>— 公式の紹介文より</cite></blockquote>` : ""}
-          <p>${br(SITE.about.text)}</p>
-          ${SITE.about.source ? `<p class="about-src">参考：<a href="${esc(SITE.about.source.url)}" target="_blank" rel="noopener noreferrer">${esc(SITE.about.source.label)}</a></p>` : ""}
-        </div>
-      </section>` : ""}
+      ${quickNav()}
+      ${aboutSection()}
       <main class="wrap works" id="works">
         <h2 class="sec-title">${TEAMS.length}つの作品</h2>
         <ul class="cards">${cards}</ul>
@@ -145,6 +138,44 @@
       if (logo.complete && logo.naturalWidth === 0) fallback();
       else logo.addEventListener("error", fallback);
     }
+  }
+
+  /* ---------- トップの「すぐ移動」ボタン ---------- */
+  function quickNav() {
+    const items = [
+      SITE.about && SITE.about.steps && ["about", "めっちゃカメレオンとは"],
+      ["works", "作品"],
+      SITE.booths && SITE.booths.length && ["map", "会場マップ"],
+      voteOn() && ["vote", "投票"],
+    ].filter(Boolean);
+    return `<nav class="wrap quick" aria-label="ページ内の移動">${items.map(([id, label]) => `<a href="#${id}">${label}</a>`).join("")}</nav>`;
+  }
+
+  /* ---------- 「めっちゃカメレオン」ってどんなゲーム？ ---------- */
+  const ABOUT_ICONS = {
+    // 真っ白な体に絵をかく
+    paint: '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="27" cy="15" r="9" fill="#fff" stroke="#15331F" stroke-width="3"/><rect x="15" y="24" width="24" height="32" rx="11" fill="#fff" stroke="#15331F" stroke-width="3"/><path d="M17 36 Q27 30 37 36" stroke="#3DBA4E" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M18 45 Q27 40 36 46" stroke="#FF7A2F" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M58 6 L42 28" stroke="#7A4E2A" stroke-width="5" stroke-linecap="round"/><ellipse cx="41" cy="30" rx="4" ry="5" fill="#3A9BFF" stroke="#15331F" stroke-width="2"/></svg>',
+    // 景色にとけこむ（しま模様のかべに、同じ模様の体と目だけ）
+    hide: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="6" width="56" height="52" rx="8" fill="#F5B700" stroke="#15331F" stroke-width="3"/><rect x="5.5" y="20" width="53" height="12" fill="#3DBA4E"/><rect x="5.5" y="40" width="53" height="12" fill="#FF7A2F"/><rect x="20" y="16" width="24" height="40" rx="11" fill="none" stroke="#15331F" stroke-width="2" stroke-dasharray="4 3"/><circle cx="28" cy="26" r="4" fill="#fff" stroke="#15331F" stroke-width="2"/><circle cx="37" cy="26" r="4" fill="#fff" stroke="#15331F" stroke-width="2"/><circle cx="29" cy="26" r="1.6" fill="#15331F"/><circle cx="38" cy="26" r="1.6" fill="#15331F"/></svg>',
+    // 時間まで逃げきる（ストップウォッチ）
+    run: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="27" y="4" width="10" height="7" rx="2" fill="#15331F"/><circle cx="32" cy="36" r="22" fill="#fff" stroke="#15331F" stroke-width="3"/><path d="M32 14 A22 22 0 0 1 54 36 L32 36 Z" fill="#3DBA4E" opacity=".35"/><path d="M32 36 L32 20" stroke="#15331F" stroke-width="3.5" stroke-linecap="round"/><path d="M32 36 L43 42" stroke="#FF5C93" stroke-width="3.5" stroke-linecap="round"/><circle cx="32" cy="36" r="3" fill="#15331F"/></svg>',
+  };
+  function aboutSection() {
+    const A = SITE.about;
+    if (!A || !A.steps) return "";
+    return `
+      <section class="wrap about" id="about">
+        <h2 class="sec-title">${esc(A.title)}</h2>
+        <div class="about-box">
+          <p class="about-catch">${esc(A.catch)}<small>— 公式のキャッチコピーより</small></p>
+          <ol class="about-steps">
+            ${A.steps.map((st) => `<li><span class="about-icon">${ABOUT_ICONS[st.icon] || ""}</span><b>${esc(st.title)}</b><span>${esc(st.text)}</span></li>`).join("")}
+          </ol>
+          ${A.tags ? `<ul class="about-tags">${A.tags.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+          ${A.text ? `<p class="about-text">${br(A.text)}</p>` : ""}
+          ${A.source ? `<a class="about-link" href="${esc(A.source.url)}" target="_blank" rel="noopener noreferrer">${esc(A.source.label)}<span aria-hidden="true"> ↗</span></a>` : ""}
+        </div>
+      </section>`;
   }
 
   /* ---------- 作品ページ ---------- */
@@ -546,7 +577,8 @@
       window.scrollTo(0, 0);
     } else {
       renderHome();
-      if (id === "works") document.getElementById("works").scrollIntoView();
+      const target = id && document.getElementById(id);
+      if (target) target.scrollIntoView();
       else window.scrollTo(0, 0);
     }
   }

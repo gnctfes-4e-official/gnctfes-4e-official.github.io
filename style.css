@@ -706,3 +706,106 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
 .vote-thanks { margin: 0; font-family: var(--font-display); font-size: 1.5rem; }
 .vote-ask { margin: 10px 0 0; font-weight: 900; background: var(--volt); border: 2.5px solid var(--ink); border-radius: 12px; padding: 10px 14px; }
 .vote-note { margin: 10px 0 0; font-size: .85rem; color: var(--ink-soft); }
+
+/* トップの「すぐ移動」ボタン */
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-block: 18px 0;
+}
+.quick a {
+  text-decoration: none;
+  font-weight: 900;
+  font-size: .9rem;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 14px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.quick a::after { content: " ↓"; }
+.quick a:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+.quick + .about { padding-top: 28px; }
+
+/* めっちゃカメレオンってどんなゲーム？（絵と3ステップ） */
+.about-catch {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 5.5vw, 2rem);
+  line-height: 1.35;
+  text-align: center;
+  margin: 0 0 18px !important;
+  text-wrap: balance;
+}
+.about-catch small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+.about-steps {
+  list-style: none;
+  counter-reset: st;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 640px) { .about-steps { grid-template-columns: repeat(3, 1fr); } }
+.about-steps li {
+  counter-increment: st;
+  position: relative;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  align-items: center;
+  background: var(--leaf);
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  padding: 12px 12px 12px 14px;
+  min-width: 0;
+}
+@media (min-width: 640px) {
+  .about-steps li { grid-template-columns: 1fr; text-align: center; justify-items: center; padding: 16px 12px; }
+}
+.about-steps li::before {
+  content: counter(st);
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 1.7em;
+  height: 1.7em;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  background: var(--volt);
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+}
+.about-icon { grid-row: span 2; width: 64px; height: 64px; }
+.about-icon svg { width: 100%; height: 100%; display: block; }
+@media (min-width: 640px) { .about-icon { grid-row: auto; width: 76px; height: 76px; margin-bottom: 6px; } }
+.about-steps b { font-size: 1.02rem; line-height: 1.4; }
+.about-steps li > span:last-child { font-size: .86rem; color: var(--ink-soft); line-height: 1.5; }
+.about-tags { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.about-tags li { font-size: .82rem; font-weight: 700; border: 2px solid var(--ink); border-radius: 999px; padding: 1px 12px; background: var(--paper); }
+.about-text { margin: 16px 0 0 !important; font-weight: 700; text-align: center; }
+.about-link {
+  display: block;
+  width: fit-content;
+  margin: 14px auto 0;
+  font-weight: 900;
+  font-size: .9rem;
+  text-decoration: none;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 16px;
+  background: var(--paper);
+}
+.about-link:hover { background: var(--leaf); }
+
+.about-catch { word-break: keep-all; overflow-wrap: anywhere; }
