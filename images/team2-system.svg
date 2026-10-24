@@ -102,7 +102,6 @@
     <text x="416" y="190">① 9個のセンサの値をくらべる</text>
     <text x="416" y="214">② どのマスに当たったか判定</text>
     <text x="416" y="238">③ パソコンへ送る</text>
-    <text x="416" y="262">④ LEDテープを光らせる</text>
   </g>
 
   <!-- パソコン -->
@@ -117,40 +116,26 @@
     <text x="416" y="520" font-size="12">　（CSVファイル）</text>
   </g>
 
-  <!-- LEDテープ -->
-  <rect x="770" y="80" width="310" height="200" rx="14" fill="#FFF4C2" stroke="#15331F" stroke-width="3"/>
-  <rect x="790" y="100" width="270" height="34" rx="6" fill="#FFFFFF" stroke="#15331F" stroke-width="2.5"/>
-  <g stroke="#15331F" stroke-width="1.5">
-    <circle cx="810" cy="117" r="8" fill="#3DBA4E"/><circle cx="843" cy="117" r="8" fill="#3DBA4E"/>
-    <circle cx="876" cy="117" r="8" fill="#FF7A2F"/><circle cx="909" cy="117" r="8" fill="#3DBA4E"/>
-    <circle cx="942" cy="117" r="8" fill="#3DBA4E"/><circle cx="975" cy="117" r="8" fill="#3A9BFF"/>
-    <circle cx="1008" cy="117" r="8" fill="#3DBA4E"/><circle cx="1041" cy="117" r="8" fill="#3DBA4E"/>
-  </g>
-  <text x="790" y="176" font-size="19" font-weight="700" fill="#15331F">LEDテープ</text>
-  <text x="790" y="206" font-size="14" fill="#15331F">的の色を変えて光らせる。</text>
-  <text x="790" y="230" font-size="14" font-weight="700" fill="#C8581A">色が変わった的に当てると50点！</text>
-
   <!-- プロジェクター -->
   <rect x="770" y="340" width="310" height="200" rx="14" fill="#FFF4C2" stroke="#15331F" stroke-width="3"/>
   <use href="#proj" x="790" y="356" width="64" height="64"/>
   <text x="866" y="396" font-size="19" font-weight="700" fill="#15331F">プロジェクター</text>
   <g fill="#15331F" font-size="14">
-    <text x="790" y="452">森のゲーム画面・敵・スコア・</text>
-    <text x="790" y="476">ランキングを、壁の的に</text>
-    <text x="790" y="500">映し出す</text>
+    <text x="790" y="446">森のゲーム画面・敵・スコア・</text>
+    <text x="790" y="468">ランキングを、壁の的に映し出す。</text>
+    <text x="790" y="490">的の色が変わるのも、この映像。</text>
   </g>
+  <text x="790" y="518" font-size="14" font-weight="700" fill="#C8581A">色が変わった的に当てると50点！</text>
 
   <!-- 矢印 -->
   <g stroke="#15331F" stroke-width="2.5" marker-end="url(#a)">
     <line x1="330" y1="180" x2="398" y2="180"/>
-    <line x1="700" y1="180" x2="768" y2="180"/>
     <line x1="550" y1="280" x2="550" y2="338"/>
     <line x1="700" y1="440" x2="768" y2="440"/>
   </g>
   <g fill="#15331F" font-size="13" text-anchor="middle">
     <text x="364" y="170">衝撃の</text>
     <text x="364" y="200">信号</text>
-    <text x="734" y="170">色の制御</text>
     <text x="734" y="430">映像</text>
   </g>
   <text x="562" y="306" font-size="13" fill="#15331F">USB（シリアル通信）で</text>
