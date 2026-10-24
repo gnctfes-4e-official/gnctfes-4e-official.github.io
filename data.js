@@ -165,7 +165,7 @@ const TEAMS = [
     "public": false,
     "name": "",
     "catch": "",
-    "icon": "images/team3-icon.jpg",
+    "icon": "",
     "image": "",
     "play": {},
     "chameleon": "",
