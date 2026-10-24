@@ -377,35 +377,44 @@
   }
 
   /* ---------- 隠しコマンド ----------
-   * ・タイトルの「E」を 3 秒以内に 5 回タップ
+   * ・タイトルの「E」を 3 秒以内に 5 回タップ（パソコンはダブルクリックでも）
    * ・キーボードで ↑↑↓↓←→←→BA
    * → 10 秒間、サイト全体がカメレオンのように色を変える */
   let secretTimer = 0;
 
-  // 変身の音（ファイルを使わず、ブラウザでその場で作る）
-  //   ピロピロ↑ → シュワーン → ドーン！ → キラキラ（約1.5秒）
+  // 当たり演出の音（ファイルを使わず、ブラウザでその場で作る。約5.5秒）
+  //   ドドドド…（だんだん速く）→ キュインキュインキュイン → ギュイーン → ドーン！
+  //   → パッパラッパー（ファンファーレ）＋ キラキラ
   function secretSound(ctx, out) {
-    const t0 = ctx.currentTime + 0.02;
-    const tone = (type, f0, f1, start, dur, vol) => {
+    const t0 = ctx.currentTime + 0.03;
+    const env = (g, start, dur, vol, attack) => {
+      g.gain.setValueAtTime(0.0001, t0 + start);
+      g.gain.exponentialRampToValueAtTime(vol, t0 + start + (attack || 0.01));
+      g.gain.setValueAtTime(vol, t0 + start + Math.max(attack || 0.01, dur * 0.6));
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + start + dur);
+    };
+    const tone = (type, f0, f1, start, dur, vol, opt) => {
       const o = ctx.createOscillator(), g = ctx.createGain();
       o.type = type;
       o.frequency.setValueAtTime(f0, t0 + start);
-      if (f1) o.frequency.exponentialRampToValueAtTime(f1, t0 + start + dur);
-      g.gain.setValueAtTime(0.0001, t0 + start);
-      g.gain.exponentialRampToValueAtTime(vol, t0 + start + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + start + dur);
-      o.connect(g).connect(out);
-      o.start(t0 + start);
-      o.stop(t0 + start + dur + 0.02);
+      if (f1) o.frequency.exponentialRampToValueAtTime(f1, t0 + start + (opt && opt.glide || dur));
+      if (opt && opt.vib) {                      // ビブラート（音をゆらす）
+        const l = ctx.createOscillator(), lg = ctx.createGain();
+        l.frequency.value = opt.vib[0]; lg.gain.value = opt.vib[1];
+        l.connect(lg).connect(o.frequency);
+        l.start(t0 + start); l.stop(t0 + start + dur + 0.05);
+      }
+      let node = o;
+      if (opt && opt.lp) { const f = ctx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = opt.lp; node = o.connect(f); }
+      env(g, start, dur, vol, opt && opt.attack);
+      node.connect(g).connect(out);
+      o.start(t0 + start); o.stop(t0 + start + dur + 0.05);
     };
-    const noise = (start, dur, vol, filterType, fA, fB) => {
-      const len = Math.ceil(ctx.sampleRate * dur);
-      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-      const d = buf.getChannelData(0);
+    const noise = (start, dur, vol, type, fA, fB) => {
+      const len = Math.ceil(ctx.sampleRate * dur), buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
       for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
       const src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
-      src.buffer = buf;
-      f.type = filterType;
+      src.buffer = buf; f.type = type;
       f.frequency.setValueAtTime(fA, t0 + start);
       f.frequency.exponentialRampToValueAtTime(fB, t0 + start + dur);
       g.gain.setValueAtTime(vol, t0 + start);
@@ -413,17 +422,38 @@
       src.connect(f).connect(g).connect(out);
       src.start(t0 + start);
     };
-    // ピロピロ↑（ド・ミ・ソ・ド・ミ・ソ）
-    [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone("square", f, 0, i * 0.055, 0.09, 0.2));
-    // シュワーン
-    noise(0.3, 0.42, 1.6, "bandpass", 500, 5000);
-    // ドーン！
-    tone("sine", 190, 42, 0.72, 0.65, 0.9);
-    tone("triangle", 95, 38, 0.72, 0.5, 0.4);
-    tone("square", 150, 55, 0.72, 0.45, 0.22);   // スマホのスピーカーでも聞こえる成分
-    noise(0.72, 0.4, 1.0, "lowpass", 2500, 150);
-    // キラキラ
-    [2093, 2637, 3136, 2794, 3520].forEach((f, i) => tone("sine", f, 0, 0.9 + i * 0.07, 0.2, 0.22));
+    const brass = (freq, start, dur, vol) => {   // ラッパっぽい音
+      tone("sawtooth", freq, 0, start, dur, vol, { lp: 2600, attack: 0.03, vib: [6, freq * 0.012] });
+      tone("square", freq * 2, 0, start, dur, vol * 0.25, { lp: 3500, attack: 0.03 });
+    };
+
+    // 1. ドドドド…（だんだん速く・高く）
+    let t = 0, gap = 0.16, k = 0;
+    while (t < 1.25) {
+      noise(t, 0.06, 0.9, "bandpass", 1600 + k * 60, 1200);
+      tone("sine", 150 + k * 12, 70, t, 0.08, 0.5);
+      t += gap; gap = Math.max(0.035, gap * 0.86); k++;
+    }
+    tone("sine", 220, 880, 0, 1.3, 0.08);
+    // 2. キュインキュインキュイン
+    [1.32, 1.66, 2.0].forEach((st) => tone("square", 700, 2600, st, 0.3, 0.16, { glide: 0.16, vib: [32, 90] }));
+    // 3. ギュイーン
+    tone("sawtooth", 180, 1800, 2.36, 0.55, 0.15, { lp: 5000 });
+    noise(2.36, 0.55, 1.6, "bandpass", 400, 7000);
+    // 4. ドーン！
+    tone("sine", 200, 40, 2.92, 0.9, 0.9);
+    tone("triangle", 100, 38, 2.92, 0.7, 0.4);
+    tone("square", 160, 55, 2.92, 0.5, 0.22);
+    noise(2.92, 0.5, 1.0, "lowpass", 3000, 150);
+    // 5. パッパラッパー（タ・タ・タ・ターン）
+    brass(392, 3.05, 0.14, 0.13);   // ソ
+    brass(440, 3.19, 0.14, 0.13);   // ラ
+    brass(494, 3.33, 0.14, 0.13);   // シ
+    [523, 659, 784, 1047].forEach((f) => brass(f, 3.48, 1.9, 0.1));   // ド・ミ・ソ・ド
+    tone("sine", 131, 0, 3.48, 1.9, 0.3, { attack: 0.03 });          // 下のド
+    // 6. キラキラ
+    [2093, 2637, 3136, 3520, 4186, 3520, 3136, 2637, 3136, 3520, 4186, 5274].forEach((f, i) =>
+      tone("sine", f, 0, 3.5 + i * 0.13, 0.25, 0.13));
   }
   let audioCtx = null;
   function playSecretSound() {
@@ -432,15 +462,18 @@
       if (!AC) return;
       if (!audioCtx) audioCtx = new AC();
       if (audioCtx.state === "suspended") audioCtx.resume();
-      const master = audioCtx.createGain();
+      const master = audioCtx.createGain(), comp = audioCtx.createDynamicsCompressor();
       master.gain.value = 0.5;
-      master.connect(audioCtx.destination);
+      master.connect(comp).connect(audioCtx.destination);
       secretSound(audioCtx, master);
     } catch (e) { /* 音が出せない環境では、色が変わるだけにする */ }
   }
   window.__secretSound = secretSound; // 音の確認用
 
+  let secretOn = false;
   function chameleonMode() {
+    if (secretOn) return;
+    secretOn = true;
     playSecretSound();
     document.documentElement.classList.add("chameleon-mode");
     let toast = document.getElementById("secret-toast");
@@ -456,6 +489,7 @@
     secretTimer = setTimeout(() => {
       document.documentElement.classList.remove("chameleon-mode");
       toast.hidden = true;
+      secretOn = false;
     }, 10000);
   }
   let taps = [];
@@ -464,6 +498,9 @@
     const now = Date.now();
     taps = taps.filter((t) => now - t < 3000).concat(now);
     if (taps.length >= 5) { taps = []; chameleonMode(); }
+  });
+  document.addEventListener("dblclick", (e) => {
+    if (e.target.closest("#secret-e") && window.matchMedia("(pointer: fine)").matches) chameleonMode();
   });
   const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
   let keys = [];
