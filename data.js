@@ -210,7 +210,7 @@ const TEAMS = [
     "public": false,
     "name": "",
     "catch": "",
-    "icon": "",
+    "icon": "images/team5-icon.jpg",
     "image": "",
     "summary": "",
     "howto": [],

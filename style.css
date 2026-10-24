@@ -809,3 +809,7 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
 .about-link:hover { background: var(--leaf); }
 
 .about-catch { word-break: keep-all; overflow-wrap: anywhere; }
+
+/* 準備中ページでアイコンがあるときは全体を見せる */
+.soon-visual .soon-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--paper); }
+.card-soon .card-art:has(img) { background: var(--paper); }

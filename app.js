@@ -76,7 +76,7 @@
       </li>` : `
       <li data-c="${esc(t.color)}">
         <div class="card card-soon">
-          <div class="card-art">${mascot()}<span class="soon-mark" aria-hidden="true">？</span></div>
+          <div class="card-art">${t.icon ? `<img src="${esc(t.icon)}" alt="">` : `${mascot()}<span class="soon-mark" aria-hidden="true">？</span>`}</div>
           <div class="card-body">
             <p class="team-no">${teamLabel(t)}</p>
             <h3 class="card-name">COMING SOON</h3>
@@ -276,7 +276,7 @@
             <p class="team-no">${teamLabel(t)}</p>
             <h1 class="d-title">COMING SOON</h1>
             <p class="d-catch">この作品の紹介は準備中です。公開までお楽しみに！</p>
-            <div class="d-visual soon-visual">${mascot()}<span class="soon-mark" aria-hidden="true">？</span></div>
+            <div class="d-visual soon-visual">${t.icon ? `<img class="soon-img" src="${esc(t.icon)}" alt="">` : `${mascot()}<span class="soon-mark" aria-hidden="true">？</span>`}</div>
           </div>
         </header>
         <div class="wrap soon-back"><a class="back" href="#works"><span aria-hidden="true">← </span>ほかの作品を見る</a></div>
