@@ -640,3 +640,69 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
   .chameleon-mode #app { animation: none; filter: hue-rotate(120deg); }
   .logo-link .logo { transition: none; }
 }
+
+/* 混雑状況 */
+.crowd {
+  margin: 16px 0 0;
+  font-weight: 700;
+  font-size: .92rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+.crowd small { color: var(--ink-soft); font-weight: 500; margin-left: 4px; }
+.lv { border: 2px solid var(--ink); border-radius: 999px; padding: 0 10px; }
+.lv-low { background: #BFE8C4; }
+.lv-mid { background: var(--volt); }
+.lv-high { background: #FF8A80; }
+
+/* 投票 */
+.vote-sec { padding-block: 0 56px; }
+.vote-box {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+  max-width: 640px;
+}
+.vote-lead { margin: 0 0 14px; }
+.vote-choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (min-width: 640px) { .vote-choices { grid-template-columns: repeat(3, 1fr); } }
+.vote-choice {
+  font: inherit;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  background: color-mix(in srgb, var(--c) 22%, white);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  min-width: 0;
+}
+.vote-choice[aria-pressed="true"] { background: var(--c); box-shadow: inset 0 0 0 3px var(--ink); }
+.vote-no { font-family: var(--font-pixel); font-size: .78rem; letter-spacing: .08em; }
+.vote-nick { font-weight: 900; font-size: 1.05rem; }
+.vote-send {
+  font: inherit;
+  font-weight: 900;
+  margin-top: 16px;
+  width: 100%;
+  color: var(--paper);
+  background: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+.vote-send:disabled { background: #C9D2CC; color: var(--ink-soft); border-color: #C9D2CC; cursor: default; }
+.vote-msg { margin: 10px 0 0; color: #B3261E; font-weight: 700; font-size: .9rem; }
+.vote-msg:empty { display: none; }
+.vote-thanks { margin: 0; font-family: var(--font-display); font-size: 1.5rem; }
+.vote-ask { margin: 10px 0 0; font-weight: 900; background: var(--volt); border: 2.5px solid var(--ink); border-radius: 12px; padding: 10px 14px; }
+.vote-note { margin: 10px 0 0; font-size: .85rem; color: var(--ink-soft); }

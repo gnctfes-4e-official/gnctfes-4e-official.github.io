@@ -15,6 +15,17 @@ const SITE = {
     "url": "https://www.gifu-nct.ac.jp/elec/index.html",
     "name": "岐阜高専 電気情報工学科"
   },
+  "live": {
+    "endpoint": "",
+    "vote": {
+      "open": false,
+      "title": "いちばん印象に残ったブースは？",
+      "lead": "おもしろかった・印象に残ったブースに1票！（1台につき1日1回）",
+      "thanks": "投票ありがとう！",
+      "ask": "高専祭の人気投票では、ぜひ「電気情報工学科」の専門店に一票をお願いします！"
+    },
+    "crowd": true
+  },
   "instagram": {
     "url": "https://www.instagram.com/gnctfes_4e_official/",
     "name": "@gnctfes_4e_official"

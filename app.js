@@ -101,6 +101,7 @@
               <span><span class="insta-label">公式 Instagram</span><span class="insta-name">${esc(SITE.instagram.name)}</span></span>
               <span class="insta-arrow" aria-hidden="true">↗</span>
             </a>` : ""}
+            <p class="crowd" id="crowd" role="status" hidden></p>
           </div>
           <div class="hero-art">
             ${SITE.logo ? (SITE.department && SITE.department.url
@@ -131,8 +132,11 @@
         <p class="map-lead">E科のブースを上から見た図です。ブースをタップすると、その作品の説明が見られます。</p>
         <div class="map-box">${buildMapSVG({ links: true })}</div>
       </section>` : ""}
+      ${voteSection()}
       ${footer()}`;
     paint();
+    initVote();
+    updateCrowd();
 
     // アイコン画像がまだ無いときはカメレオンの絵に差しかえる
     const logo = app.querySelector(".logo");
@@ -257,6 +261,110 @@
       return `<a class="media-link" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${esc(m.caption || "動画を見る")}<span aria-hidden="true"> ↗</span></a>`;
     return `<figure><img src="${esc(m.src)}" alt="${esc(plain(m.caption))}" loading="lazy">${cap}</figure>`;
   }
+
+  /* ---------- 投票 ---------- */
+  const LIVE = SITE.live || {};
+  const VOTE = LIVE.vote || {};
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* 保存できなくても投票はできる */ } },
+  };
+  const todayKey = () => { const d = new Date(); return "eka-voted-" + d.getFullYear() + (d.getMonth() + 1) + d.getDate(); };
+  const clientId = () => {
+    let id = store.get("eka-client");
+    if (!id) { id = Math.random().toString(36).slice(2) + Date.now().toString(36); store.set("eka-client", id); }
+    return id;
+  };
+  const voteOn = () => VOTE.open && (LIVE.endpoint || SITE.preview);
+
+  function voteThanks(note) {
+    return `<p class="vote-thanks">${esc(VOTE.thanks || "投票ありがとう！")}</p>
+      ${VOTE.ask ? `<p class="vote-ask">${esc(VOTE.ask)}</p>` : ""}
+      ${note ? `<p class="vote-note">${esc(note)}</p>` : ""}`;
+  }
+
+  function voteSection() {
+    if (!voteOn()) return "";
+    const done = store.get(todayKey());
+    return `
+      <section class="wrap vote-sec" id="vote">
+        <h2 class="sec-title">${esc(VOTE.title || "いちばん印象に残ったブースは？")}</h2>
+        <div class="vote-box" id="vote-box">
+          ${done ? voteThanks() : `
+          <p class="vote-lead">${esc(VOTE.lead || "")}</p>
+          <div class="vote-choices">
+            ${TEAMS.map((t) => `<button type="button" class="vote-choice" data-team="${esc(t.id)}" data-c="${esc(t.color)}" aria-pressed="false">
+              <span class="vote-no">TEAM ${t.no}</span><span class="vote-nick">${esc(t.nickname || "")}</span></button>`).join("")}
+          </div>
+          <button type="button" class="vote-send" id="vote-send" disabled>ブースを選んでください</button>
+          <p class="vote-msg" id="vote-msg" role="status"></p>`}
+        </div>
+      </section>`;
+  }
+
+  function initVote() {
+    const box = document.getElementById("vote-box");
+    const send = document.getElementById("vote-send");
+    if (!box || !send) return;
+    let chosen = "";
+    box.querySelectorAll(".vote-choice").forEach((b) => b.addEventListener("click", () => {
+      chosen = b.dataset.team;
+      box.querySelectorAll(".vote-choice").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      const t = TEAMS.find((x) => x.id === chosen);
+      send.disabled = false;
+      send.textContent = `TEAM ${t.no} ${t.nickname || ""} に投票する`;
+    }));
+    send.addEventListener("click", async () => {
+      if (!chosen) return;
+      const msg = document.getElementById("vote-msg");
+      send.disabled = true;
+      send.textContent = "送信中…";
+      if (SITE.preview) {
+        box.innerHTML = voteThanks("（確認用プレビューなので、実際には送信していません）");
+        return;
+      }
+      try {
+        const res = await fetch(LIVE.endpoint, {
+          method: "POST",
+          body: JSON.stringify({ action: "vote", team: chosen, client: clientId() }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || "error");
+        store.set(todayKey(), chosen);
+        box.innerHTML = voteThanks(data.already ? "（今日はもう投票済みです）" : "");
+      } catch (e) {
+        msg.textContent = "うまく送れませんでした。電波のよいところで、もう一度押してください。";
+        send.disabled = false;
+        send.textContent = "もう一度送る";
+      }
+    });
+  }
+
+  /* ---------- 混雑状況（1分ごとに更新） ---------- */
+  let crowdData = null;
+  async function updateCrowd(force) {
+    const el = document.getElementById("crowd");
+    if (!LIVE.crowd || !LIVE.endpoint || SITE.preview) {
+      if (el && SITE.preview && LIVE.crowd) {
+        el.hidden = false;
+        el.innerHTML = `いまの会場：<b class="lv lv-low">空いています</b>（会場内 約8人）<small>見本の表示</small>`;
+      }
+      return;
+    }
+    if (force || !crowdData) {
+      try {
+        const res = await fetch(LIVE.endpoint + "?action=status");
+        crowdData = await res.json();
+      } catch (e) { crowdData = null; }
+    }
+    const c = crowdData;
+    if (!el) return;
+    if (!c || !c.ok || !c.show) { el.hidden = true; return; }
+    const cls = c.level === "混雑" ? "lv-high" : c.level === "やや混雑" ? "lv-mid" : "lv-low";
+    el.hidden = false;
+    el.innerHTML = `いまの会場：<b class="lv ${cls}">${esc(c.level)}</b>${c.inside != null ? `（会場内 約${c.inside}人）` : ""}<small>${esc(c.updated || "")} 更新</small>`;
+  }
+  if (LIVE.crowd && LIVE.endpoint && !SITE.preview) setInterval(() => updateCrowd(true), 60000);
 
   function footer() {
     return `
