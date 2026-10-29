@@ -167,7 +167,7 @@
         <div class="about-box">
           <p class="about-catch">${esc(A.catch)}<small>— 公式のキャッチコピーより</small></p>
           <ol class="about-steps">
-            ${A.steps.map((st) => `<li><span class="about-icon">${ABOUT_ICONS[st.icon] || ""}</span><b>${esc(st.title)}</b><span>${esc(st.text)}</span></li>`).join("")}
+            ${A.steps.map((st) => `<li><span class="about-icon">${ABOUT_ICONS[st.icon] || ""}</span><b>${rb(st.title)}</b><span>${rb(st.text)}</span></li>`).join("")}
           </ol>
           ${A.tags ? `<ul class="about-tags">${A.tags.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
           ${A.text ? `<p class="about-text">${br(A.text)}</p>` : ""}
@@ -194,9 +194,9 @@
 
     const play = t.play || {};
     const playInfo = [
-      play.time && `<div><dt>時間</dt><dd>${esc(play.time)}</dd></div>`,
-      play.players && `<div><dt>人数</dt><dd>${esc(play.players)}</dd></div>`,
-      play.target && `<div><dt>対象</dt><dd>${esc(play.target)}</dd></div>`,
+      play.time && `<div><dt>時間</dt><dd>${rb(play.time)}</dd></div>`,
+      play.players && `<div><dt>人数</dt><dd>${rb(play.players)}</dd></div>`,
+      play.target && `<div><dt>対象</dt><dd>${rb(play.target)}</dd></div>`,
     ].filter(Boolean).join("");
     const howto =
       (playInfo ? `<dl class="play-info">${playInfo}</dl>` : "") +
@@ -204,12 +204,17 @@
         ? `<ol class="steps">${t.howto.map((s) => `<li><span>${br(s)}</span></li>`).join("")}</ol>`
         : ph("ここに遊び方の手順が入ります。"));
 
+    // 「見出し：本文」の見出しを太字にする
+    const headed = (s) => {
+      const m = String(s).match(/^([^：。\n]{1,24})：([\s\S]*)$/);
+      return m ? `<b class="hd">${rb(m[1])}</b>${br(m[2])}` : br(s);
+    };
     const chameleon = t.chameleon
-      ? `<p>${br(t.chameleon)}</p>`
+      ? `<ul class="points">${t.chameleon.split("\n").map((s) => `<li>${headed(s)}</li>`).join("")}</ul>`
       : ph("ここにカメレオンポイント（作品のどこが「カメレオン」なのか）が入ります。");
 
     const points = t.points.length
-      ? `<ul class="points">${t.points.map((s) => `<li>${br(s)}</li>`).join("")}</ul>`
+      ? `<ul class="points">${t.points.map((s) => `<li>${headed(s)}</li>`).join("")}</ul>`
       : ph("ここに見どころが入ります。");
 
     let techBody =
@@ -238,9 +243,11 @@
             <a class="back" href="#works"><span aria-hidden="true">← </span>作品一覧</a>
             <p class="team-no">${teamLabel(t)}${privTag(t)}</p>
             <h1 class="d-title">${rb(teamName(t))}</h1>
+            ${t.subtitle ? `<p class="d-sub">${rb(t.subtitle)}</p>` : ""}
             ${t.catch ? `<p class="d-catch">${rb(t.catch)}</p>` : ph("ここにキャッチコピーが入ります。")}
             <div class="d-visual">
-              ${t.image ? `<img src="${esc(t.image)}" alt="${esc(plain(teamName(t)))}">` : mascot()}
+              ${t.image ? `<img src="${esc(t.image)}" alt="${esc(plain(teamName(t)))}">`
+                : t.icon ? `<img class="d-icon" src="${esc(t.icon)}" alt="${esc(plain(teamName(t)))}">` : mascot()}
             </div>
           </div>
         </header>
@@ -253,6 +260,7 @@
           ${section("ことばの解説", glossary)}
           ${section("写真・動画", media)}
           ${SITE.booths && SITE.booths.some((b) => b.team === t.id) ? section("会場での場所", `<div class="map-box">${buildMapSVG({ links: true, highlight: t.id })}</div>`) : ""}
+          ${voteInvite(t)}
         </main>
         ${open.length > 1 ? `<nav class="wrap pager${prev === next ? " pager-one" : ""}" aria-label="ほかの作品">
           ${prev === next ? "" : `<a href="#${esc(prev.id)}" data-c="${esc(prev.color)}"><span class="pager-dir">← まえの作品</span><span class="pager-name">TEAM ${prev.no}　${esc(plain(teamName(prev)))}</span></a>`}
@@ -298,35 +306,48 @@
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* 保存できなくても投票はできる */ } },
   };
-  const todayKey = () => { const d = new Date(); return "eka-voted-" + d.getFullYear() + (d.getMonth() + 1) + d.getDate(); };
+  // 投票はスマホ1台につき1回だけ。投票したらこの印を残し、サーバー側でも同じ端末IDを二重に数えない
+  const VOTED_KEY = "eka-voted";
   const clientId = () => {
     let id = store.get("eka-client");
-    if (!id) { id = Math.random().toString(36).slice(2) + Date.now().toString(36); store.set("eka-client", id); }
+    if (!id) {
+      id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36);
+      store.set("eka-client", id);
+    }
     return id;
   };
   const voteOn = () => VOTE.open && (LIVE.endpoint || SITE.preview);
+  const teamTitle = (id) => { const t = TEAMS.find((x) => x.id === id); return t ? `TEAM ${t.no} ${t.nickname || ""}` : ""; };
 
-  function voteThanks(note) {
-    return `<p class="vote-thanks">${esc(VOTE.thanks || "投票ありがとう！")}</p>
+  function voteThanks(teamId, note) {
+    return `<p class="vote-thanks">${esc(VOTE.thanks || "投票ありがとうございます！")}</p>
+      ${teamId ? `<p class="vote-mine">あなたの1票：<b>${esc(teamTitle(teamId))}</b></p>` : ""}
       ${VOTE.ask ? `<p class="vote-ask">${esc(VOTE.ask)}</p>` : ""}
       ${note ? `<p class="vote-note">${esc(note)}</p>` : ""}`;
   }
 
+  function voteForm() {
+    return `
+          <p class="vote-lead">${esc(VOTE.lead || "")}</p>
+          <div class="vote-choices">
+            ${TEAMS.map((t) => `<button type="button" class="vote-choice" data-team="${esc(t.id)}" data-c="${esc(t.color)}" aria-pressed="false">
+              ${t.icon ? `<img src="${esc(t.icon)}" alt="">` : ""}
+              <span class="vote-no">TEAM ${t.no}</span><span class="vote-nick">${esc(t.nickname || "")}</span></button>`).join("")}
+          </div>
+          <div class="vote-bar">
+            <button type="button" class="vote-send" id="vote-send" disabled>ブースを1つ選んでください</button>
+          </div>
+          <p class="vote-msg" id="vote-msg" role="status"></p>`;
+  }
+
   function voteSection() {
     if (!voteOn()) return "";
-    const done = store.get(todayKey());
+    const done = !SITE.preview && store.get(VOTED_KEY);
     return `
       <section class="wrap vote-sec" id="vote">
         <h2 class="sec-title">${esc(VOTE.title || "いちばん印象に残ったブースは？")}</h2>
         <div class="vote-box" id="vote-box">
-          ${done ? voteThanks() : `
-          <p class="vote-lead">${esc(VOTE.lead || "")}</p>
-          <div class="vote-choices">
-            ${TEAMS.map((t) => `<button type="button" class="vote-choice" data-team="${esc(t.id)}" data-c="${esc(t.color)}" aria-pressed="false">
-              <span class="vote-no">TEAM ${t.no}</span><span class="vote-nick">${esc(t.nickname || "")}</span></button>`).join("")}
-          </div>
-          <button type="button" class="vote-send" id="vote-send" disabled>ブースを選んでください</button>
-          <p class="vote-msg" id="vote-msg" role="status"></p>`}
+          ${done ? voteThanks(done, "このスマホからの投票は受け付けました。投票は1台につき1回までです。") : voteForm()}
         </div>
       </section>`;
   }
@@ -335,21 +356,37 @@
     const box = document.getElementById("vote-box");
     const send = document.getElementById("vote-send");
     if (!box || !send) return;
-    let chosen = "";
+    const msg = document.getElementById("vote-msg");
+    let chosen = "", confirming = false;
+    const reset = () => {
+      confirming = false;
+      send.classList.remove("is-confirm");
+      send.textContent = chosen ? `${teamTitle(chosen)} に投票する` : "ブースを1つ選んでください";
+      msg.textContent = "";
+    };
     box.querySelectorAll(".vote-choice").forEach((b) => b.addEventListener("click", () => {
       chosen = b.dataset.team;
       box.querySelectorAll(".vote-choice").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-      const t = TEAMS.find((x) => x.id === chosen);
       send.disabled = false;
-      send.textContent = `TEAM ${t.no} ${t.nickname || ""} に投票する`;
+      reset();
+      // スマホでは「投票する」ボタンが見えるところまで動かす
+      const r = send.getBoundingClientRect();
+      if (r.bottom > window.innerHeight - 80) send.scrollIntoView({ behavior: "smooth", block: "center" });
     }));
     send.addEventListener("click", async () => {
       if (!chosen) return;
-      const msg = document.getElementById("vote-msg");
+      // 1回目のタップは確認。もう一度押すと送信する
+      if (!confirming) {
+        confirming = true;
+        send.classList.add("is-confirm");
+        send.textContent = `この1票で決定（${teamTitle(chosen)}）`;
+        msg.textContent = "投票は1回だけで、あとから変えられません。よければもう一度押してください。";
+        return;
+      }
       send.disabled = true;
       send.textContent = "送信中…";
       if (SITE.preview) {
-        box.innerHTML = voteThanks("（確認用プレビューなので、実際には送信していません）");
+        box.innerHTML = voteThanks(chosen, "（確認用プレビューなので、実際には送信していません）");
         return;
       }
       try {
@@ -359,14 +396,33 @@
         });
         const data = await res.json();
         if (!data.ok) throw new Error(data.error || "error");
-        store.set(todayKey(), chosen);
-        box.innerHTML = voteThanks(data.already ? "（今日はもう投票済みです）" : "");
+        const mine = data.already ? (data.team || chosen) : chosen;
+        store.set(VOTED_KEY, mine);
+        box.innerHTML = voteThanks(mine, data.already ? "このスマホからは、すでに投票済みです。投票は1台につき1回までです。" : "");
       } catch (e) {
-        msg.textContent = "うまく送れませんでした。電波のよいところで、もう一度押してください。";
         send.disabled = false;
-        send.textContent = "もう一度送る";
+        reset();
+        msg.textContent = "うまく送れませんでした。電波のよいところで、もう一度押してください。";
       }
     });
+  }
+
+  // 作品ページの下：投票へのさそい
+  function voteInvite(t) {
+    if (!voteOn()) return "";
+    return `<a class="vote-invite" href="#vote">印象に残ったら、${esc(teamTitle(t.id))} に1票をお願いします！<span aria-hidden="true"> →</span></a>`;
+  }
+
+  // スマホ用：画面の下にいつも出る移動ボタン
+  function bottomNav() {
+    const items = [
+      ["", "トップ", "M4 11 L12 4 L20 11 V20 H14 V14 H10 V20 H4 Z"],
+      ["works", "作品", "M4 4 H10 V10 H4 Z M14 4 H20 V10 H14 Z M4 14 H10 V20 H4 Z M14 14 H20 V20 H14 Z"],
+      SITE.booths && SITE.booths.length && ["map", "会場マップ", "M3 6 L9 4 L15 6 L21 4 V18 L15 20 L9 18 L3 20 Z M9 4 V18 M15 6 V20"],
+      voteOn() && ["vote", "投票", "M5 12 L10 17 L19 7"],
+    ].filter(Boolean);
+    return `<nav class="bnav" aria-label="移動">${items.map(([id, label, d]) =>
+      `<a href="#${id || "top"}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg><span>${label}</span></a>`).join("")}</nav>`;
   }
 
   function footer() {
@@ -376,7 +432,8 @@
           <p class="foot-title">めっちゃ<span class="e">E</span>科メレオン</p>
           <p><span class="nb">${esc(SITE.school)}</span>　<span class="nb">${esc(SITE.event)}</span></p>
         </div>
-      </footer>`;
+      </footer>
+      ${bottomNav()}`;
   }
 
   /* ---------- 隠しコマンド ----------
@@ -553,12 +610,12 @@
     if (team) {
       if (isOpen(team)) renderTeam(team);
       else renderSoon(team);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: "instant" });
     } else {
       renderHome();
       const target = id && document.getElementById(id);
-      if (target) target.scrollIntoView();
-      else window.scrollTo(0, 0);
+      if (target) target.scrollIntoView({ behavior: "instant" });
+      else window.scrollTo({ top: 0, behavior: "instant" });
     }
   }
 
