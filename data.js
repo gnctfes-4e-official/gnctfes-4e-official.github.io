@@ -217,7 +217,7 @@ const TEAMS = [
     "name": "カメレオンターゲット",
     "catch": "色が変わった的をねらって、けりまくれ！",
     "icon": "images/team2-icon.jpg?v=b6ddc9f9",
-    "image": "",
+    "image": "images/team2-hero.jpg?v=7a4f1e94",
     "summary": "サッカーボールをけって、壁に映し出された的に当てる体感型の的当てゲームです。舞台はカメレオンが住む森の中です。ステージを進みながら、次々と現れる敵にボールを当てて倒し、森を抜けることを目指します。\n的の裏に取り付けたセンサがボールの当たった場所を判定し、最後にスコアとランキングが表示されます。",
     "howto": [
       "最初にニックネームを入力します。",
@@ -289,11 +289,6 @@ const TEAMS = [
       }
     ],
     "media": [
-      {
-        "type": "image",
-        "src": "images/team2-play.jpg?v=35e6b8da",
-        "caption": "プレイ中の様子。壁に映った的（敵）をねらってボールをけります"
-      },
       {
         "type": "image",
         "src": "images/team2-booth.jpg?v=e3fc0953",
@@ -591,7 +586,7 @@ const TEAMS = [
     "name": "カメレオンの森",
     "catch": "みんなで森を作ろう！",
     "icon": "images/team6-icon.jpg?v=c0e27a5a",
-    "image": "",
+    "image": "images/team6-hero.jpg?v=384f8f1e",
     "summary": "「カメレオンの森」は、カメラの前で手を動かして、荒れた土地を森に育てていく育成シミュレーションです。画面にさわらず、手を「かざす・にぎる・ふる」だけで遊べます。\n来てくれた人みんなで1つの森を育てていくので、あなたが遊んだぶんも森に残ります。",
     "howto": [
       "カメラの前に手をかざすと、画面の手のカーソルが動きます。",
@@ -655,11 +650,6 @@ const TEAMS = [
         "type": "image",
         "src": "images/team6-order.jpg?v=6d3c3826",
         "caption": "動物・色・名前をえらぶ画面"
-      },
-      {
-        "type": "image",
-        "src": "images/team6-camera.jpg?v=9bd9812f",
-        "caption": "手の動きをとらえるWebカメラ"
       }
     ]
   }
