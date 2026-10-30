@@ -106,7 +106,6 @@
             ${SITE.logo ? (SITE.department && SITE.department.url
               ? `<a class="logo-link" href="${esc(SITE.department.url)}" target="_blank" rel="noopener noreferrer">
                   <img class="logo" src="${esc(SITE.logo)}" alt="${esc(SITE.department.name)}のサイトを開く">
-                  <span class="logo-hint">${esc(SITE.department.name)}のサイトへ<span aria-hidden="true"> ↗</span></span>
                 </a>`
               : `<img class="logo" src="${esc(SITE.logo)}" alt="めっちゃE科メレオンのアイコン">`) : mascot("cycle")}
           </div>

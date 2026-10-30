@@ -907,3 +907,27 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
   .logo { width: 104px; flex: none; border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
   .logo-hint { margin: 0; width: auto; }
 }
+/* ===== 2026-10-30 ===== */
+/* 学科サイトへの文字はなくし、アイコンだけ（押すと学科サイトが開く）。スマホではアイコンを真ん中に */
+@media (max-width: 639px) {
+  .logo-link { justify-content: center; }
+}
+
+/* 作品カード：作品テーマ（サッカーなど）はチーム色のラベル、作品名は大きな文字。どちらも黒い字 */
+.card .team-no .nick {
+  display: block;
+  width: fit-content;
+  margin: 6px 0 2px;
+  padding: 1px 12px;
+  font-size: .9rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--c) 38%, white);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+.card .card-name { font-size: 1.3rem; margin-top: 2px; }
+@media (max-width: 639px) {
+  .card .team-no .nick { margin: 4px 0 2px; padding: 0 9px; font-size: .8rem; }
+  .card .card-name { font-size: 1.08rem; }
+}
