@@ -167,8 +167,8 @@ const TEAMS = [
         "{再帰性|さいきせい}反射材の衣装（光が来た方向に光を返す）",
         "プログラム：Python（OpenCV・YOLO11x-seg）"
       ],
-      "figure": "images/team1-system.png?v=930e996d",
-      "figurePhone": "images/team1-system-phone.png?v=0a36953d",
+      "figure": "images/team1-system.png?v=07a5a2d9",
+      "figurePhone": "images/team1-system-phone.png?v=e34e247d",
       "figureCaption": "システム図：カメラ（入力）→ パソコン（処理）→ プロジェクター・ハーフミラー（出力）"
     },
     "glossary": [
@@ -245,7 +245,8 @@ const TEAMS = [
         "Unity（ゲームエンジン）",
         "プログラム：C++（ESP32）、C#（Unity）"
       ],
-      "figure": "images/team2-system.svg?v=6a142c8b",
+      "figure": "images/team2-system.png?v=66079caa",
+      "figurePhone": "images/team2-system-phone.png?v=75cf8127",
       "figureCaption": "システム図：的の{圧電|あつでん}センサ（入力）→ ESP32・パソコン（処理）→ プロジェクター（出力）"
     },
     "glossary": [
@@ -327,7 +328,8 @@ const TEAMS = [
         "{Godot|ゴドー}（ゲームエンジン）",
         "プログラム：GDScript（Godot）、Arduino IDE（マイコン）"
       ],
-      "figure": "images/team3-system.svg?v=3810c37f",
+      "figure": "images/team3-system.png?v=c13f5f32",
+      "figurePhone": "images/team3-system-phone.png?v=c6043409",
       "figureCaption": "システム図：ハンドル・ペダル・{弾倉|だんそう}のセンサ（入力）→ マイコン・パソコン（処理）→ プロジェクター・効果音（出力）"
     },
     "glossary": [
@@ -448,6 +450,7 @@ const TEAMS = [
         "プログラム：Arduino IDE（マイコン）、HTML / JavaScript（スマホのwebアプリ）"
       ],
       "figure": "images/team4-system.png?v=722a7aaa",
+      "figurePhone": "images/team4-system-phone.png?v=82a65331",
       "figureCaption": "システム図：圧力マット・スマホ（入力）→ ESP32・Cloudflare・パソコン（処理）→ ゲーム画面（出力）"
     },
     "glossary": [
@@ -526,7 +529,8 @@ const TEAMS = [
         "Unity（ゲームエンジン）",
         "プログラム：C++（ESP32）、C#（Unity）"
       ],
-      "figure": "images/team5-system.png?v=020c2267",
+      "figure": "images/team5-system.png?v=e7f63a9e",
+      "figurePhone": "images/team5-system-phone.png?v=72534c19",
       "figureCaption": "システム図：バランスボードの傾き（入力）→ ESP32・パソコン（処理）→ モニター・スピーカー（出力）"
     },
     "glossary": [
@@ -599,7 +603,8 @@ const TEAMS = [
         "Unreal Engine 5（ゲームエンジン）",
         "プログラム：Python（OpenCV・MediaPipe）"
       ],
-      "figure": "images/team6-system.png?v=6c322ec6",
+      "figure": "images/team6-system.png?v=7f4da62b",
+      "figurePhone": "images/team6-system-phone.png?v=9eaa6c09",
       "figureCaption": "システム図：Webカメラ＋手の動き・タブレット（入力）→ パソコン（処理）→ プロジェクター・スピーカー（出力）"
     },
     "glossary": [
