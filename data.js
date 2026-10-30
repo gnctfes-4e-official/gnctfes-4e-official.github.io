@@ -292,7 +292,7 @@ const TEAMS = [
       {
         "type": "image",
         "src": "images/team2-play.jpg?v=35e6b8da",
-        "caption": "プレイ中のようす。壁に映った的（敵）をねらってボールをけります"
+        "caption": "プレイ中の様子。壁に映った的（敵）をねらってボールをけります"
       },
       {
         "type": "image",
@@ -402,7 +402,7 @@ const TEAMS = [
       {
         "type": "image",
         "src": "images/team3-players.jpg?v=40875aa7",
-        "caption": "3人で協力して操作しているようす"
+        "caption": "3人で協力して操作している様子"
       },
       {
         "type": "video",
