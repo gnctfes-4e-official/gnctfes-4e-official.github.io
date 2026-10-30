@@ -288,7 +288,18 @@ const TEAMS = [
         "desc": "決められた点数をこえた人だけが挑戦できる、とくべつなステージです。"
       }
     ],
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "src": "images/team2-play.jpg?v=35e6b8da",
+        "caption": "プレイ中のようす。壁に映った的（敵）をねらってボールをけります"
+      },
+      {
+        "type": "image",
+        "src": "images/team2-booth.jpg?v=e3fc0953",
+        "caption": "ブースの外観"
+      }
+    ]
   },
   {
     "id": "team3",
@@ -388,6 +399,11 @@ const TEAMS = [
       }
     ],
     "media": [
+      {
+        "type": "image",
+        "src": "images/team3-players.jpg?v=40875aa7",
+        "caption": "3人で協力して操作しているようす"
+      },
       {
         "type": "video",
         "src": "images/team3-play.mp4?v=c161d172",
@@ -634,6 +650,17 @@ const TEAMS = [
         "desc": "ゲームを作るためのソフト（ゲームエンジン）です。きれいな3Dの景色を作れます。"
       }
     ],
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "src": "images/team6-order.jpg?v=6d3c3826",
+        "caption": "動物・色・名前をえらぶ画面"
+      },
+      {
+        "type": "image",
+        "src": "images/team6-camera.jpg?v=9bd9812f",
+        "caption": "手の動きをとらえるWebカメラ"
+      }
+    ]
   }
 ];
