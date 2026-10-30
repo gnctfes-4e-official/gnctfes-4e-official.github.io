@@ -652,6 +652,8 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
   max-width: 640px;
 }
 .vote-lead { margin: 0 0 14px; }
+.vote-period { margin: 0 0 14px; max-width: 640px; font-size: .95rem; }
+.vote-period b { display: inline-block; background: var(--volt); border: 2px solid var(--ink); border-radius: 8px; padding: 1px 8px; }
 .vote-choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 @media (min-width: 640px) { .vote-choices { grid-template-columns: repeat(3, 1fr); } }
 .vote-choice {

@@ -223,7 +223,8 @@
         ? `<h3 class="sub">使った部品・技術</h3><ul class="chips">${tech.parts.map((p) => `<li>${rb(p)}</li>`).join("")}</ul>`
         : "") +
       (tech.figure
-        ? `<figure class="fig"><a href="${esc(tech.figure)}" target="_blank" rel="noopener"><img src="${esc(tech.figure)}" alt="${esc(plain(tech.figureCaption) || "仕組みの図")}"></a>${tech.figureCaption ? `<figcaption>${rb(tech.figureCaption)}（タップで拡大）</figcaption>` : ""}</figure>`
+        // figurePhone：横長の図をスマホ用に縦に並べかえたもの（あればスマホではこちらを出す）
+        ? `<figure class="fig"><a href="${esc(tech.figure)}" target="_blank" rel="noopener"><picture>${tech.figurePhone ? `<source media="(max-width:639px)" srcset="${esc(tech.figurePhone)}">` : ""}<img src="${esc(tech.figure)}" alt="${esc(plain(tech.figureCaption) || "仕組みの図")}"></picture></a>${tech.figureCaption ? `<figcaption>${rb(tech.figureCaption)}（タップで拡大）</figcaption>` : ""}</figure>`
         : "");
     if (!techBody) techBody = ph("ここに仕組みの解説（回路図・使った部品・プログラムの流れなど）が入ります。");
 
@@ -317,6 +318,15 @@
     return id;
   };
   const voteOn = () => VOTE.open && (LIVE.endpoint || SITE.preview);
+  // 投票の期間："before"（まだ）・"open"（受付中）・"after"（終了）。確認用プレビューではいつでも受付中にする
+  const votePhase = () => {
+    if (SITE.preview) return "open";
+    const now = Date.now();
+    if (VOTE.start && now < Date.parse(VOTE.start)) return "before";
+    if (VOTE.end && now >= Date.parse(VOTE.end)) return "after";
+    return "open";
+  };
+  const votePeriod = () => (VOTE.period ? `<p class="vote-period">投票できる期間：<b>${esc(VOTE.period)}</b></p>` : "");
   const teamTitle = (id) => { const t = TEAMS.find((x) => x.id === id); return t ? `TEAM ${t.no} ${t.nickname || ""}` : ""; };
 
   function voteThanks(teamId, note) {
@@ -340,16 +350,33 @@
           <p class="vote-msg" id="vote-msg" role="status"></p>`;
   }
 
+  const voteClosed = () => `<p class="vote-thanks">投票は終了しました。</p><p class="vote-note">たくさんの投票、ありがとうございました！</p>`;
+  const voteNotYet = () => `<p class="vote-thanks">投票はまだ始まっていません。</p><p class="vote-note">${esc(VOTE.period ? VOTE.period.split("〜")[0].trim() : "")}から投票できます。お楽しみに！</p>`;
+
   function voteSection() {
     if (!voteOn()) return "";
     const done = !SITE.preview && store.get(VOTED_KEY);
+    const phase = votePhase();
+    const body = done ? voteThanks(done, "このスマホからの投票は受け付けました。投票は1台につき1回までです。")
+      : phase === "before" ? voteNotYet()
+      : phase === "after" ? voteClosed()
+      : voteForm();
     return `
       <section class="wrap vote-sec" id="vote">
         <h2 class="sec-title">${esc(VOTE.title || "いちばん印象に残ったブースは？")}</h2>
-        <div class="vote-box" id="vote-box">
-          ${done ? voteThanks(done, "このスマホからの投票は受け付けました。投票は1台につき1回までです。") : voteForm()}
-        </div>
+        ${votePeriod()}
+        <div class="vote-box" id="vote-box">${body}</div>
       </section>`;
+  }
+
+  // 開いたままのページでも、始まる・終わる時刻になったら表示を切りかえる（24時間以内のときだけ）
+  let phaseTimer = 0;
+  function watchVotePhase(rerender) {
+    clearTimeout(phaseTimer);
+    if (!voteOn() || SITE.preview) return;
+    const now = Date.now();
+    const next = [VOTE.start, VOTE.end].map((s) => (s ? Date.parse(s) : NaN)).find((t) => t > now);
+    if (next && next - now < 86400000) phaseTimer = setTimeout(rerender, next - now + 1000);
   }
 
   function initVote() {
@@ -395,6 +422,9 @@
           body: JSON.stringify({ action: "vote", team: chosen, client: clientId() }),
         });
         const data = await res.json();
+        // スマホの時計がずれていても、受付期間はサーバーの時刻で決まる
+        if (data.error === "closed") { box.innerHTML = voteClosed(); return; }
+        if (data.error === "not_started") { box.innerHTML = voteNotYet(); return; }
         if (!data.ok) throw new Error(data.error || "error");
         const mine = data.already ? (data.team || chosen) : chosen;
         store.set(VOTED_KEY, mine);
@@ -409,7 +439,7 @@
 
   // 作品ページの下：投票へのさそい
   function voteInvite(t) {
-    if (!voteOn()) return "";
+    if (!voteOn() || votePhase() !== "open") return "";
     return `<a class="vote-invite" href="#vote">印象に残ったら、${esc(teamTitle(t.id))} に1票をお願いします！<span aria-hidden="true"> →</span></a>`;
   }
 
@@ -617,6 +647,7 @@
       if (target) target.scrollIntoView({ behavior: "instant" });
       else window.scrollTo({ top: 0, behavior: "instant" });
     }
+    watchVotePhase(() => { const y = scrollY; route(); window.scrollTo({ top: y, behavior: "instant" }); });
   }
 
   window.addEventListener("hashchange", route);

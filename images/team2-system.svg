@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="640" viewBox="0 0 1100 640" font-family="'Hiragino Sans','Yu Gothic','Meiryo',sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#15331F"/>
+    </marker>
+    <marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#E0661F"/>
+    </marker>
+
+    <!-- サッカーボール -->
+    <symbol id="ball" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="17" fill="#FFFFFF" stroke="#15331F" stroke-width="2.5"/>
+      <path d="M20 13 L26.7 17.9 L24.1 25.7 L15.9 25.7 L13.3 17.9 Z" fill="#15331F"/>
+      <path d="M20 13 V4 M26.7 17.9 L35 15 M24.1 25.7 L29 33 M15.9 25.7 L11 33 M13.3 17.9 L5 15" stroke="#15331F" stroke-width="2"/>
+    </symbol>
+
+    <!-- 圧電センサ -->
+    <symbol id="piezo" viewBox="0 0 64 64">
+      <path d="M26 46 C24 56 18 58 10 62" fill="none" stroke="#D63A2F" stroke-width="2.5"/>
+      <path d="M38 46 C40 56 46 58 54 62" fill="none" stroke="#15331F" stroke-width="2.5"/>
+      <circle cx="32" cy="28" r="22" fill="#D9A93A" stroke="#15331F" stroke-width="2.5"/>
+      <circle cx="32" cy="28" r="13" fill="#EDEDED" stroke="#15331F" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- ESP32 -->
+    <symbol id="esp" viewBox="0 0 90 60">
+      <rect x="2" y="2" width="86" height="56" rx="4" fill="#2B2F2D" stroke="#15331F" stroke-width="2.5"/>
+      <path d="M26 12 V6 H32 V12 H38 V6 H44 V12 H50 V6 H56 V12 H62" fill="none" stroke="#E0A800" stroke-width="2"/>
+      <rect x="22" y="16" width="46" height="28" rx="2" fill="#C9CFCB" stroke="#15331F" stroke-width="2"/>
+      <text x="45" y="35" font-size="10" font-weight="700" fill="#15331F" text-anchor="middle">ESP32</text>
+      <path d="M8 52 H82" stroke="#E0A800" stroke-width="3" stroke-dasharray="3 3"/>
+    </symbol>
+
+    <!-- ノートパソコン -->
+    <symbol id="pc" viewBox="0 0 100 70">
+      <rect x="14" y="4" width="72" height="46" rx="4" fill="#2B2F2D" stroke="#15331F" stroke-width="2.5"/>
+      <rect x="19" y="9" width="62" height="36" fill="#7BC47F"/>
+      <path d="M19 45 L30 26 L38 36 L48 20 L60 34 L68 28 L81 45 Z" fill="#2E8B57"/>
+      <path d="M4 54 H96 L90 64 H10 Z" fill="#C9CFCB" stroke="#15331F" stroke-width="2.5" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- プロジェクター -->
+    <symbol id="proj" viewBox="0 0 64 64">
+      <path d="M40 38 L62 20 L62 62 L40 46 Z" fill="#FFE14D"/>
+      <rect x="2" y="30" width="40" height="24" rx="5" fill="#E9ECEA" stroke="#15331F" stroke-width="2.5"/>
+      <circle cx="33" cy="42" r="6.5" fill="#2B2F2D" stroke="#15331F" stroke-width="2"/>
+      <path d="M9 37 H22 M9 42 H22" stroke="#8C9A92" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+
+  <rect width="1100" height="640" fill="#FFFFFF"/>
+
+  <!-- 列の見出し -->
+  <g font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">
+    <rect x="20" y="24" width="310" height="34" rx="17" fill="#3D8B4F"/>
+    <text x="175" y="47">入力</text>
+    <rect x="400" y="24" width="300" height="34" rx="17" fill="#2E6B3C"/>
+    <text x="550" y="47">処理</text>
+    <rect x="770" y="24" width="310" height="34" rx="17" fill="#C8581A"/>
+    <text x="925" y="47">出力</text>
+  </g>
+
+  <!-- 入力：的の板 + 圧電センサ -->
+  <rect x="20" y="80" width="310" height="460" rx="14" fill="#E6F4DC" stroke="#15331F" stroke-width="3"/>
+  <text x="40" y="114" font-size="18" font-weight="700" fill="#15331F">的の板 ＋ 圧電センサ ×9</text>
+  <g stroke="#15331F" stroke-width="2.5">
+    <rect x="70" y="150" width="52" height="52" rx="6" fill="#FFFFFF"/>
+    <rect x="132" y="150" width="52" height="52" rx="6" fill="#FF9F45"/>
+    <rect x="194" y="150" width="52" height="52" rx="6" fill="#FFFFFF"/>
+    <rect x="70" y="212" width="52" height="52" rx="6" fill="#FFFFFF"/>
+    <rect x="132" y="212" width="52" height="52" rx="6" fill="#FFFFFF"/>
+    <rect x="194" y="212" width="52" height="52" rx="6" fill="#FFFFFF"/>
+    <rect x="70" y="274" width="52" height="52" rx="6" fill="#FFFFFF"/>
+    <rect x="132" y="274" width="52" height="52" rx="6" fill="#FFFFFF"/>
+    <rect x="194" y="274" width="52" height="52" rx="6" fill="#FFFFFF"/>
+  </g>
+  <g fill="#D9A93A" stroke="#15331F" stroke-width="2">
+    <circle cx="96" cy="176" r="10"/><circle cx="158" cy="176" r="10"/><circle cx="220" cy="176" r="10"/><circle cx="96" cy="238" r="10"/><circle cx="158" cy="238" r="10"/><circle cx="220" cy="238" r="10"/><circle cx="96" cy="300" r="10"/><circle cx="158" cy="300" r="10"/><circle cx="220" cy="300" r="10"/>
+  </g>
+  <use href="#ball" x="164" y="128" width="34" height="34"/>
+  <path d="M204 130 H228 M206 139 H232 M204 148 H222" stroke="#15331F" stroke-width="2" stroke-linecap="round"/>
+  <g fill="#15331F" font-size="13">
+    <text x="40" y="358">的（まと）は9マス。それぞれの裏に</text>
+    <text x="40" y="376">圧電センサが付いている</text>
+    <text x="40" y="394" font-size="12">（オレンジ＝色が変わって光っている的）</text>
+  </g>
+  <line x1="40" y1="408" x2="310" y2="408" stroke="#15331F" stroke-width="1" stroke-dasharray="4 4"/>
+  <use href="#piezo" x="40" y="424" width="64" height="64"/>
+  <g fill="#15331F">
+    <text x="116" y="446" font-size="16" font-weight="700">圧電センサ</text>
+    <text x="116" y="468" font-size="13">たたかれた力を電気に</text>
+    <text x="116" y="486" font-size="13">変える部品。ボールが当たった</text>
+    <text x="116" y="504" font-size="13">マスのセンサが強く反応する</text>
+  </g>
+
+  <!-- ESP32 -->
+  <rect x="400" y="80" width="300" height="200" rx="14" fill="#BFE8C4" stroke="#15331F" stroke-width="3"/>
+  <use href="#esp" x="416" y="96" width="90" height="60"/>
+  <text x="522" y="124" font-size="21" font-weight="700" fill="#15331F">ESP32</text>
+  <text x="522" y="146" font-size="13" fill="#15331F">（マイコン）</text>
+  <g fill="#15331F" font-size="14">
+    <text x="416" y="190">① 9個のセンサの値をくらべる</text>
+    <text x="416" y="214">② どのマスに当たったか判定</text>
+    <text x="416" y="238">③ パソコンへ送る</text>
+  </g>
+
+  <!-- パソコン -->
+  <rect x="400" y="340" width="300" height="200" rx="14" fill="#FFE0CC" stroke="#15331F" stroke-width="3"/>
+  <use href="#pc" x="416" y="356" width="90" height="63"/>
+  <text x="522" y="382" font-size="21" font-weight="700" fill="#15331F">パソコン</text>
+  <text x="522" y="404" font-size="13" fill="#15331F">Unity（ゲームエンジン）</text>
+  <g fill="#15331F" font-size="14">
+    <text x="416" y="452">① 得点を計算する</text>
+    <text x="416" y="476">② ステージを進める</text>
+    <text x="416" y="500">③ ランキングを記録する</text>
+    <text x="416" y="520" font-size="12">　（CSVファイル）</text>
+  </g>
+
+  <!-- プロジェクター -->
+  <rect x="770" y="340" width="310" height="200" rx="14" fill="#FFF4C2" stroke="#15331F" stroke-width="3"/>
+  <use href="#proj" x="790" y="356" width="64" height="64"/>
+  <text x="866" y="396" font-size="19" font-weight="700" fill="#15331F">プロジェクター</text>
+  <g fill="#15331F" font-size="14">
+    <text x="790" y="446">森のゲーム画面・敵・スコア・</text>
+    <text x="790" y="468">ランキングを、壁の的に映し出す。</text>
+    <text x="790" y="490">的の色が変わるのも、この映像。</text>
+  </g>
+  <text x="790" y="518" font-size="14" font-weight="700" fill="#C8581A">色が変わった的に当てると50点！</text>
+
+  <!-- 矢印 -->
+  <g stroke="#15331F" stroke-width="2.5" marker-end="url(#a)">
+    <line x1="330" y1="180" x2="398" y2="180"/>
+    <line x1="550" y1="280" x2="550" y2="338"/>
+    <line x1="700" y1="440" x2="768" y2="440"/>
+  </g>
+  <g fill="#15331F" font-size="13" text-anchor="middle">
+    <text x="364" y="170">衝撃の</text>
+    <text x="364" y="200">信号</text>
+    <text x="734" y="430">映像</text>
+  </g>
+  <text x="562" y="306" font-size="13" fill="#15331F">USB（シリアル通信）で</text>
+  <text x="562" y="324" font-size="13" fill="#15331F">当たったマスを送る</text>
+
+  <!-- プレイヤーのくり返し -->
+  <path d="M925 540 V588 H175 V544" fill="none" stroke="#E0661F" stroke-width="2.5" stroke-dasharray="8 5" marker-end="url(#p)"/>
+  <text x="550" y="612" font-size="14" font-weight="700" fill="#C8581A" text-anchor="middle">プレイヤーが、壁に映った敵（的）をねらって、またける</text>
+</svg>
