@@ -924,3 +924,14 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
 
 /* 投票のお試し期間（デモ用）のお知らせ */
 .vote-trial { margin: 0 0 14px; max-width: 640px; font-size: .9rem; line-height: 1.7; background: #FFF6D6; border: 2px dashed var(--ink); border-radius: 12px; padding: 8px 12px; }
+
+/* ===== スマホの読みやすさ（2026-10-30） ===== */
+/* 作品名：10文字（カメレオンサバイバーなど）までは1行に収める。折り返すときも「ー」や小さい字で行を始めない */
+.d-title, .card-name, .d-catch { line-break: strict; }
+@media (max-width: 639px) {
+  .d-title { font-size: min(1.9rem, calc((100vw - 48px) / 11.5)); }
+}
+/* 「電気情報工学科 4年」が「4／年」で切れないように、空白のところでだけ折り返す */
+.eyebrow { word-break: keep-all; }
+/* 押しやすい大きさ（高さ 44px 以上） */
+.quick a, .back, .about-link { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: .3em; }
