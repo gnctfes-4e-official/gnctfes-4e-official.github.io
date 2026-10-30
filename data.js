@@ -517,7 +517,7 @@ const TEAMS = [
     "subtitle": "〜遅刻寸前、森を駆け抜けろ〜",
     "catch": "ゆれて、よけて、まにあって！",
     "icon": "images/team5-icon.jpg?v=a2768b1d",
-    "image": "images/team5-hero.jpg?v=e3daeeb8",
+    "image": "images/team5-hero.jpg?v=95ec1413",
     "summary": "サーカス団に入って50年、熊さんは誰もが知っている大人気スターです。ある朝、目を覚まして時計を見ると……大変です！ もうすぐ開演の時間です！\nプレイヤーはバランスボードに乗って熊さんを操作し、障害物をよけながらサーカス会場を目指しましょう！",
     "howto": [
       "バランスボードに乗ります。",
@@ -599,7 +599,7 @@ const TEAMS = [
     "name": "カメレオンの森",
     "catch": "みんなで森を作ろう！",
     "icon": "images/team6-icon.jpg?v=c0e27a5a",
-    "image": "images/team6-hero.jpg?v=384f8f1e",
+    "image": "images/team6-hero.jpg?v=0f63e659",
     "summary": "「カメレオンの森」は、カメラの前で手を動かして、荒れた土地を森に育てていく育成シミュレーションです。画面にさわらず、手を「かざす・にぎる・ふる」だけで遊べます。\n来てくれた人みんなで1つの森を育てていくので、あなたが遊んだぶんも森に残ります。",
     "howto": [
       "カメラの前に手をかざすと、画面の手のカーソルが動きます。",
@@ -669,6 +669,11 @@ const TEAMS = [
         "type": "image",
         "src": "images/team6-order.jpg?v=6d3c3826",
         "caption": "動物・色・名前をえらぶ画面"
+      },
+      {
+        "type": "image",
+        "src": "images/team6-camera.jpg?v=9bd9812f",
+        "caption": "手の動きをとらえるWebカメラ"
       }
     ]
   }
