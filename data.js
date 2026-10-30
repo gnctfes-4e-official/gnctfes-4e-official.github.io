@@ -293,7 +293,7 @@ const TEAMS = [
         "type": "video",
         "src": "images/team2-play.mp4?v=2494dcd8",
         "poster": "images/team2-play-poster.jpg?v=0eee098e",
-        "caption": "プレイ中の様子（約25秒・音なし）"
+        "caption": "プレイ中の様子（約25秒）"
       },
       {
         "type": "image",
@@ -409,7 +409,7 @@ const TEAMS = [
         "type": "video",
         "src": "images/team3-play.mp4?v=7ade7fc4",
         "poster": "images/team3-play-poster.jpg?v=80fe6238",
-        "caption": "実際に遊んでいるところ（20秒・音なし）"
+        "caption": "実際に遊んでいるところ（20秒）"
       },
       {
         "type": "image",
@@ -586,7 +586,7 @@ const TEAMS = [
         "type": "video",
         "src": "images/team5-play.mp4?v=0b7b8c18",
         "poster": "images/team5-play-poster.jpg?v=871014d2",
-        "caption": "ゲーム画面の様子（約20秒・音なし）"
+        "caption": "ゲーム画面の様子（約20秒）"
       }
     ]
   },
@@ -663,7 +663,7 @@ const TEAMS = [
         "type": "video",
         "src": "images/team6-play.mp4?v=606a7982",
         "poster": "images/team6-play-poster.jpg?v=559a90f1",
-        "caption": "遊んでいる様子（約30秒・音なし）"
+        "caption": "遊んでいる様子（約30秒）"
       },
       {
         "type": "image",
