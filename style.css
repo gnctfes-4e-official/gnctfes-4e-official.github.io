@@ -900,18 +900,8 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
 .points .hd ruby rt { font-weight: 700; }
 .points li + li { margin-top: 6px; }
 
-@media (max-width: 639px) {
-  /* トップのアイコンは小さくして、「学科のサイトへ」と横に並べる */
-  .hero-art { width: 100%; justify-self: stretch; }
-  .logo-link { display: flex; align-items: center; gap: 12px; }
-  .logo { width: 104px; flex: none; border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); }
-  .logo-hint { margin: 0; width: auto; }
-}
 /* ===== 2026-10-30 ===== */
-/* 学科サイトへの文字はなくし、アイコンだけ（押すと学科サイトが開く）。スマホではアイコンを真ん中に */
-@media (max-width: 639px) {
-  .logo-link { justify-content: center; }
-}
+/* 学科サイトへの文字はなくし、アイコンだけ（押すと学科サイトが開く）。スマホのアイコンは元の大きさ（最大190px・真ん中） */
 
 /* 作品カード：作品テーマ（サッカーなど）はチーム色のラベル、作品名は大きな文字。どちらも黒い字 */
 .card .team-no .nick {
