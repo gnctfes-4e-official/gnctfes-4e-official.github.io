@@ -931,3 +931,6 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
   .card .team-no .nick { margin: 4px 0 2px; padding: 0 9px; font-size: .8rem; }
   .card .card-name { font-size: 1.08rem; }
 }
+
+/* 投票のお試し期間（デモ用）のお知らせ */
+.vote-trial { margin: 0 0 14px; max-width: 640px; font-size: .9rem; line-height: 1.7; background: #FFF6D6; border: 2px dashed var(--ink); border-radius: 12px; padding: 8px 12px; }

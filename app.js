@@ -318,13 +318,24 @@
   };
   const voteOn = () => VOTE.open && (LIVE.endpoint || SITE.preview);
   // 投票の期間："before"（まだ）・"open"（受付中）・"after"（終了）。確認用プレビューではいつでも受付中にする
+  //   trialFrom 〜 start はお試し期間（デモ用）。お試しの票は本番の票数に入らず、本番になったらもう一度投票できる
   const votePhase = () => {
     if (SITE.preview) return "open";
-    const now = Date.now();
-    if (VOTE.start && now < Date.parse(VOTE.start)) return "before";
+    const now = Date.now(), from = VOTE.trialFrom || VOTE.start;
+    if (from && now < Date.parse(from)) return "before";
     if (VOTE.end && now >= Date.parse(VOTE.end)) return "after";
     return "open";
   };
+  const isTrial = () => !SITE.preview && !!VOTE.start && Date.now() < Date.parse(VOTE.start);
+  // 投票した印は「チーム|t（お試し）または r（本番）」。お試しの印は本番になったら無視する
+  const votedTeam = () => {
+    if (SITE.preview) return "";
+    const [team, kind] = String(store.get(VOTED_KEY) || "").split("|");
+    if (!team) return "";
+    if (kind === "t" && !isTrial()) return "";
+    return team;
+  };
+  const trialNote = () => (isTrial() ? `<p class="vote-trial">いまは<b>お試し期間</b>です。本番の投票は${esc(VOTE.period ? VOTE.period.split("〜")[0].trim() : "")}からで、お試しの票は本番の票数に入りません。</p>` : "");
   const votePeriod = () => (VOTE.period ? `<p class="vote-period">投票できる期間：<b>${esc(VOTE.period)}</b></p>` : "");
   const teamTitle = (id) => { const t = TEAMS.find((x) => x.id === id); return t ? `TEAM ${t.no} ${t.nickname || ""}` : ""; };
 
@@ -349,14 +360,15 @@
           <p class="vote-msg" id="vote-msg" role="status"></p>`;
   }
 
+  const trialDoneNote = () => `お試しの投票を受け付けました（本番の票数には入りません）。本番の${VOTE.period ? VOTE.period.split("〜")[0].trim() : "投票開始"}からは、もう一度投票できます。`;
   const voteClosed = () => `<p class="vote-thanks">投票は終了しました。</p><p class="vote-note">たくさんの投票、ありがとうございました！</p>`;
   const voteNotYet = () => `<p class="vote-thanks">投票はまだ始まっていません。</p><p class="vote-note">${esc(VOTE.period ? VOTE.period.split("〜")[0].trim() : "")}から投票できます。お楽しみに！</p>`;
 
   function voteSection() {
     if (!voteOn()) return "";
-    const done = !SITE.preview && store.get(VOTED_KEY);
+    const done = votedTeam();
     const phase = votePhase();
-    const body = done ? voteThanks(done, "このスマホからの投票は受け付けました。投票は1台につき1回までです。")
+    const body = done ? voteThanks(done, isTrial() ? trialDoneNote() : "このスマホからの投票は受け付けました。投票は1台につき1回までです。")
       : phase === "before" ? voteNotYet()
       : phase === "after" ? voteClosed()
       : voteForm();
@@ -364,6 +376,7 @@
       <section class="wrap vote-sec" id="vote">
         <h2 class="sec-title">${esc(VOTE.title || "いちばん印象に残ったブースは？")}</h2>
         ${votePeriod()}
+        ${phase === "open" ? trialNote() : ""}
         <div class="vote-box" id="vote-box">${body}</div>
       </section>`;
   }
@@ -374,7 +387,7 @@
     clearTimeout(phaseTimer);
     if (!voteOn() || SITE.preview) return;
     const now = Date.now();
-    const next = [VOTE.start, VOTE.end].map((s) => (s ? Date.parse(s) : NaN)).find((t) => t > now);
+    const next = [VOTE.trialFrom, VOTE.start, VOTE.end].map((s) => (s ? Date.parse(s) : NaN)).find((t) => t > now);
     if (next && next - now < 86400000) phaseTimer = setTimeout(rerender, next - now + 1000);
   }
 
@@ -426,8 +439,10 @@
         if (data.error === "not_started") { box.innerHTML = voteNotYet(); return; }
         if (!data.ok) throw new Error(data.error || "error");
         const mine = data.already ? (data.team || chosen) : chosen;
-        store.set(VOTED_KEY, mine);
-        box.innerHTML = voteThanks(mine, data.already ? "このスマホからは、すでに投票済みです。投票は1台につき1回までです。" : "");
+        // お試しかどうかもサーバーの時刻で決まる
+        store.set(VOTED_KEY, `${mine}|${data.trial ? "t" : "r"}`);
+        box.innerHTML = voteThanks(mine, data.trial ? trialDoneNote()
+          : data.already ? "このスマホからは、すでに投票済みです。投票は1台につき1回までです。" : "");
       } catch (e) {
         send.disabled = false;
         reset();

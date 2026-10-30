@@ -38,9 +38,10 @@ const SITE = {
     "name": "岐阜高専 電気情報工学科"
   },
   "live": {
-    "endpoint": "",
+    "endpoint": "https://script.google.com/macros/s/AKfycbxSQM4k5oObySs3Vv1OCWdykCHn-LGCNj8ApZ_Knn21tGgcY3IBMii7bdAgh22i2svh/exec",
     "vote": {
       "open": true,
+      "trialFrom": "2026-10-30T11:00:00+09:00",
       "start": "2026-10-31T09:00:00+09:00",
       "end": "2026-11-01T16:00:00+09:00",
       "period": "10月31日（土）9:00 〜 11月1日（日）16:00",
