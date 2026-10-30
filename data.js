@@ -118,7 +118,7 @@ const SITE = {
       "y": 6,
       "w": 3,
       "h": 3,
-      "door": "left"
+      "door": "top"
     }
   ],
   "school": "岐阜工業高等専門学校 電気情報工学科 4年",
@@ -437,7 +437,7 @@ const TEAMS = [
     "name": "カメレオンサバイバー",
     "catch": "協力しておばけを撃退し、森から脱出せよ！！",
     "icon": "images/team4-icon.jpg?v=591e370b",
-    "image": "",
+    "image": "images/team4-hero.jpg?v=18264fd1",
     "summary": "夜の森に迷いこんだカメレオンを、みんなで協力して脱出を手助けするゲームです。カメレオン役は足元のマットをふんでキャラクターを動かし、鍵となるホタルを集めて出口の扉をめざします。\n行く手をはばむおばけは、{灯|あか}り役がライトを当てないと倒せません。QRコードをスマホで読みこめば、見ている人もその場で{灯|あか}り役として参加できます。",
     "howto": [
       "カメレオン役を1人決めます。{灯|あか}り役はQRコードをスマホで読みこんで参加します。",
@@ -505,7 +505,19 @@ const TEAMS = [
         "desc": "インターネットを通して、外からパソコンのページにつなげるしくみです。これのおかげで、会場のWi-Fiにつながなくても5Gのまま参加できます。"
       }
     ],
-    "media": []
+    "media": [
+      {
+        "type": "video",
+        "src": "images/team4-play.mp4?v=f6ef858c",
+        "poster": "images/team4-play-poster.jpg?v=a8a62b8d",
+        "caption": "遊んでいる様子（約20秒）"
+      },
+      {
+        "type": "image",
+        "src": "images/team4-mat.jpg?v=dd3da8e7",
+        "caption": "足でふむマットと説明パネル"
+      }
+    ]
   },
   {
     "id": "team5",
