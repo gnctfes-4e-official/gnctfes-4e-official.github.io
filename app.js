@@ -293,7 +293,7 @@
   function mediaItem(m) {
     const cap = m.caption ? `<figcaption>${rb(m.caption)}</figcaption>` : "";
     if (m.type === "video")
-      return `<figure><video src="${esc(m.src)}"${m.poster ? ` poster="${esc(m.poster)}"` : ""} controls playsinline preload="metadata"></video>${cap}</figure>`;
+      return `<figure><video src="${esc(m.src)}"${m.poster ? ` poster="${esc(m.poster)}"` : ""} controls muted playsinline preload="metadata"></video>${cap}</figure>`;
     if (m.type === "link")
       return `<a class="media-link" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">${esc(m.caption || "動画を見る")}<span aria-hidden="true"> ↗</span></a>`;
     return `<figure><img src="${esc(m.src)}" alt="${esc(plain(m.caption))}" loading="lazy">${cap}</figure>`;

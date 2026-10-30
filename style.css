@@ -935,3 +935,6 @@ ruby rt { font-size: .5em; font-weight: 700; letter-spacing: 0; ruby-align: cent
 .eyebrow { word-break: keep-all; }
 /* 押しやすい大きさ（高さ 44px 以上） */
 .quick a, .back, .about-link { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: .3em; }
+
+/* 動画は切り取らずに全体を見せる（縦長の動画もあるため）。音はすべて消してある（muted・音声トラックなし） */
+.gallery video { object-fit: contain; background: #111; }

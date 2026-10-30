@@ -138,7 +138,7 @@ const TEAMS = [
     "name": "光学迷彩",
     "catch": "カメレオンになろう！",
     "icon": "images/team1-icon.jpg?v=2f3f4524",
-    "image": "",
+    "image": "images/team1-hero.jpg?v=affcae15",
     "summary": "カメレオンは、まわりの景色にまぎれて敵から身をかくす生き物です。この作品では、あなたがそのカメレオンになります！\nカメラがあなたを見つけ、「あなたの後ろにあるはずの景色」を体に映し出すことで、まるで体がすけて壁にとけこんだように見えます。カメレオンのような{擬態|ぎたい}を、自分の体で体験してみましょう！",
     "howto": [
       "{擬態|ぎたい}する人：光を反射する専用の衣装を着ます。",
@@ -290,6 +290,12 @@ const TEAMS = [
     ],
     "media": [
       {
+        "type": "video",
+        "src": "images/team2-play.mp4?v=2494dcd8",
+        "poster": "images/team2-play-poster.jpg?v=0eee098e",
+        "caption": "プレイ中の様子（約25秒・音なし）"
+      },
+      {
         "type": "image",
         "src": "images/team2-booth.jpg?v=e3fc0953",
         "caption": "ブースの外観"
@@ -401,9 +407,9 @@ const TEAMS = [
       },
       {
         "type": "video",
-        "src": "images/team3-play.mp4?v=c161d172",
+        "src": "images/team3-play.mp4?v=7ade7fc4",
         "poster": "images/team3-play-poster.jpg?v=80fe6238",
-        "caption": "実際に遊んでいるところ（20秒）"
+        "caption": "実際に遊んでいるところ（20秒・音なし）"
       },
       {
         "type": "image",
@@ -511,7 +517,7 @@ const TEAMS = [
     "subtitle": "〜遅刻寸前、森を駆け抜けろ〜",
     "catch": "ゆれて、よけて、まにあって！",
     "icon": "images/team5-icon.jpg?v=a2768b1d",
-    "image": "",
+    "image": "images/team5-hero.jpg?v=e3daeeb8",
     "summary": "サーカス団に入って50年、熊さんは誰もが知っている大人気スターです。ある朝、目を覚まして時計を見ると……大変です！ もうすぐ開演の時間です！\nプレイヤーはバランスボードに乗って熊さんを操作し、障害物をよけながらサーカス会場を目指しましょう！",
     "howto": [
       "バランスボードに乗ります。",
@@ -575,7 +581,14 @@ const TEAMS = [
         "desc": "生き物がまわりの景色や別のものにそっくりな色・形になって、見つかりにくくすることです。カメレオンの色変わりも擬態の一つです。"
       }
     ],
-    "media": []
+    "media": [
+      {
+        "type": "video",
+        "src": "images/team5-play.mp4?v=0b7b8c18",
+        "poster": "images/team5-play-poster.jpg?v=871014d2",
+        "caption": "ゲーム画面の様子（約20秒・音なし）"
+      }
+    ]
   },
   {
     "id": "team6",
@@ -646,6 +659,12 @@ const TEAMS = [
       }
     ],
     "media": [
+      {
+        "type": "video",
+        "src": "images/team6-play.mp4?v=606a7982",
+        "poster": "images/team6-play-poster.jpg?v=559a90f1",
+        "caption": "遊んでいる様子（約30秒・音なし）"
+      },
       {
         "type": "image",
         "src": "images/team6-order.jpg?v=6d3c3826",
